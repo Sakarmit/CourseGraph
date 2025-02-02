@@ -1,0 +1,7 @@
+#Visual Studio Code Ignores
+.vscode/*
+#Python Ignores
+__pycache__/*
+#Project Ignores
+uncached/*
+
