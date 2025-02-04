@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 import json
+import os
 
 degree_works = 'https://degreeworks.charlotte.edu/worksheets/WEB31'
 user_id = None
@@ -57,6 +58,10 @@ def get_degree_works_data(browser):
     '''
 
     result = browser.execute_script(testFetch)
-
-    with open('uncached/file.json', 'w') as file:
-        json.dump(result, file, indent=4)
+    try:
+        os.makedirs('uncached', exist_ok=True)
+        file_path = 'uncached/file.json'
+        with open(file_path, 'w+') as file:
+            json.dump(result, file)
+    except:
+        print("Failed to save cookies")
