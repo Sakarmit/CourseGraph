@@ -2,6 +2,6 @@
 .vscode/*
 #Python Ignores
 __pycache__/*
+venv/*
 #Project Ignores
 uncached/*
-
