@@ -41,7 +41,6 @@ def add_edge(_from, _to, width=1, title="", arrows="to", dashes=False):
     dashes=dashes,
 )
     
-
 def draw_graph():
     graph.show("ex.html", notebook=False)
 
@@ -49,7 +48,6 @@ if __name__ == "__main__":
     make_graph()
 
     graph.set_edge_smooth('dynamic')
-
 
     green = "#00b200"
     red = "#b20000"
