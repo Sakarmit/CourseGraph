@@ -11,12 +11,14 @@ degree_works = 'https://degreeworks.charlotte.edu/worksheets/WEB31'
 user_id = None
 
 """
-    load_degree_works function : Loads the Degree Works page and ensures the user is logged in.
+    Loads the DegreeWorks page using the provided browser instance.
+
+    This function navigates to the DegreeWorks page and ensures the user is logged in.
+    It waits for the page to load and then fetches the DegreeWorks data.
 
     Args:
-        browser: A selenium.webdriver instance used to interact with the
-                 web page.
-    """
+        browser: A browser instance used to interact with the webpage.
+"""
 def load_degree_works(browser):
     ## fetching degreeworks page
     browser.get(degree_works)
@@ -28,25 +30,13 @@ def load_degree_works(browser):
     get_degree_works_data(browser)
 
 """ 
-    log_in_user function : Logs in the user to the Degree Works page.
+    Logs in the user to the DegreeWorks page and ensure successful page load.
 
     Args:
-        browser: A selenium.webdriver instance used to interact with the
-                 web page.
+        browser: A browser instance used to interact with the webpage.
 """
 def log_in_user(browser):
-    ## allow for user login
-    try:
-        username_field = WebDriverWait(browser, 10).until(
-            EC.presence_of_element_located((By.ID, "username"))
-        )
-        password_field = browser.find_element(By.ID, "password")
-        login_button = browser.find_element(By.ID, "shibboleth-login-button")
-    except:
-        print("Failed to get username/password field")
-        browser.quit()
-
-    #Wait for Duo Verification
+    # Wait for User Login & Duo Verification
     try:
         WebDriverWait(browser, 600).until_not(
             EC.url_contains('https://api-c9cc3e0e.duosecurity.com/frame/v4/auth/prompt?sid=frameless-')
@@ -56,11 +46,12 @@ def log_in_user(browser):
         print("Failed to login")
         browser.quit()
 
-    #Degree works
+    # Wait Degree works to load
     try:
         WebDriverWait(browser, 600).until(
             EC.url_contains(degree_works)
         )
+        # Checking if page elements finished loading
         WebDriverWait(browser, 10).until(
             EC.presence_of_element_located((By.ID, "student-id"))
         )
@@ -69,15 +60,16 @@ def log_in_user(browser):
         browser.quit()
 
 """
-    get_degree_works_data function : Fetches the data from the Degree Works page.
+    Fetches the data from the DegreeWorks page.
 
     Args:
-        browser: A selenium.webdriver instance used to interact with the
-                 web page.
+        browser: A browser instance used to interact with the webpage.
     """
 def get_degree_works_data(browser):
-    ## finding user id
+    # Finding user data
     user_id = browser.find_element(By.ID, "student-id").get_attribute("value")
+
+    # Fetch request which returns all user course data
     degreeDataFetch = f'''
     return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={user_id}&school=UG&degree=BS&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
     .then(response => response.json())
@@ -86,12 +78,12 @@ def get_degree_works_data(browser):
     '''
 
     result = browser.execute_script(degreeDataFetch)
-    ## saving student data to json file 
+    # Saving student data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)
         file_path = 'uncached/file.json'
         with open(file_path, 'w+') as file:
             json.dump(result, file)
-    ## messaging signaling error in saving json file
     except:
-        print("Failed to save cookies")
+        print("Failed to save degree works data to file")
+        browser.quit()
