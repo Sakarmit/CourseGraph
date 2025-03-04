@@ -8,7 +8,6 @@ import json
 import os
 
 degree_works = 'https://degreeworks.charlotte.edu/worksheets/WEB31'
-user_id = None
 
 """
     Loads the DegreeWorks page using the provided browser instance.
@@ -20,14 +19,14 @@ user_id = None
         browser: A browser instance used to interact with the webpage.
 """
 def load_degree_works(browser):
-    ## fetching degreeworks page
+    # Fetching degreeworks page
     browser.get(degree_works)
     if not 'https://degreeworks.charlotte.edu/worksheets/WEB31' == browser.current_url:
         log_in_user(browser)
-    ## wait for page to load
+    # Wait for page to load
     WebDriverWait(browser, 10)
-    ## fetching degreeworks data
-    get_degree_works_data(browser)
+    # Fetching degreeworks data
+    get_degrees_data(browser)
 
 """ 
     Logs in the user to the DegreeWorks page and ensure successful page load.
@@ -60,24 +59,40 @@ def log_in_user(browser):
         browser.quit()
 
 """
-    Fetches the data from the DegreeWorks page.
+    Fetches the user degrees data from the DegreeWorks page.
 
     Args:
         browser: A browser instance used to interact with the webpage.
-    """
-def get_degree_works_data(browser):
-    # Finding user data
+"""
+def get_degrees_data(browser):
+    # Finding user id
     user_id = browser.find_element(By.ID, "student-id").get_attribute("value")
+    # Finding user degree program
+    user_program = browser.find_element(By.XPATH, "//span[text()='Program']/parent::div").text
+    if "(UG)" in user_program:
+        if "BS" in user_program:
+            user_program = "UG&degree=BS"
+        elif "BA" in user_program:
+            user_program = "UG&degree=BA"
+        else:
+            print(f"Unsupported degree type - {user_program}")
+            # browser.quit()
+    elif "(GR)" in user_program:
+        user_program = "GR&degree=MS" 
+    else:
+        print(f"Unsupported degree type - {user_program}")
+        # browser.quit()
 
     # Fetch request which returns all user course data
     degreeDataFetch = f'''
-    return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={user_id}&school=UG&degree=BS&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
+    return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={user_id}&school={user_program}&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
     .then(response => response.json())
     .then(data => data)
     .catch(error => error);
     '''
 
     result = browser.execute_script(degreeDataFetch)
+
     # Saving student data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)
