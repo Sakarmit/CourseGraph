@@ -8,4 +8,4 @@ load_degree_works(browser)
 
 graph.make_graph()
 #Add nodes and edges here
-graph.draw_graph()
+# graph.draw_graph()

@@ -102,3 +102,13 @@ def get_degrees_data(browser):
     except:
         print("Failed to save degree works data to file")
         browser.quit()
+
+def get_course_prereqs(browser, subject, course_number):
+    courseDataFetch = f'''
+    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={course_number}&")
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => error);
+    '''
+    result = browser.execute_script(courseDataFetch)
+    return result
