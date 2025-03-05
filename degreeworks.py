@@ -58,6 +58,28 @@ def log_in_user(browser):
         print("Failed to get Degreeworks after login")
         browser.quit()
 
+def get_user_info(browser):
+    userInfoFetch = '''
+        return fetch("https://degreeworks.charlotte.edu/api/students/myself")
+        .then(response => response.json())
+        .then(data => data)
+        .catch(error => error);
+    '''
+    result = browser.execute_script(userInfoFetch)
+    try:
+        student = {}
+        subpart = result['_embedded']['students'][0]
+        student['id'] = subpart['id']
+
+        goal0 = subpart['goals'][0]
+
+        student['program_level'] = goal0['school']['key']
+        student['program_type'] = goal0['degree']['key']
+
+        return student
+    except:
+        print("Failed to get user info")
+        browser.quit()
 """
     Fetches the user degrees data from the DegreeWorks page.
 
@@ -65,27 +87,11 @@ def log_in_user(browser):
         browser: A browser instance used to interact with the webpage.
 """
 def get_degrees_data(browser):
-    # Finding user id
-    user_id = browser.find_element(By.ID, "student-id").get_attribute("value")
-    # Finding user degree program
-    user_program = browser.find_element(By.XPATH, "//span[text()='Program']/parent::div").text
-    if "(UG)" in user_program:
-        if "BS" in user_program:
-            user_program = "UG&degree=BS"
-        elif "BA" in user_program:
-            user_program = "UG&degree=BA"
-        else:
-            print(f"Unsupported degree type - {user_program}")
-            # browser.quit()
-    elif "(GR)" in user_program:
-        user_program = "GR&degree=MS" 
-    else:
-        print(f"Unsupported degree type - {user_program}")
-        # browser.quit()
-
+    student = get_user_info(browser)
+    print(student)
     # Fetch request which returns all user course data
     degreeDataFetch = f'''
-    return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={user_id}&school={user_program}&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
+    return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={student['id']}&school={student['program_level']}&degree={student['program_type']}&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
     .then(response => response.json())
     .then(data => data)
     .catch(error => error);
