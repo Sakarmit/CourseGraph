@@ -1,4 +1,7 @@
 import json
+import requests
+import os
+
 
 def extract_prerequisites(prerequisites):
     ##an empty list to store formatted prerequisites
@@ -38,3 +41,59 @@ course = data["courseInformation"]["courses"][0]
 prerequisites = course["prerequisites"]
 
 print(extract_prerequisites(prerequisites))
+
+
+
+classes = {
+        "core_classes": [],
+        "gen_eds": [],
+        "conc_classes": [],  
+        "all_possible_conc_classes": [],
+        "all_classes": []
+    }    
+#Adds finished courses
+def add_finished_courses(data, classes):
+    if "fitList" in data and "classArray" in data["fitList"]:
+        for classes_data in data["fitList"]["classArray"]:
+            class_entry = {
+                "discipline": classes_data.get("discipline"),
+                "number": classes_data.get("number"),
+                "credits": classes_data.get("credits"),
+                "letterGrade": classes_data.get("letterGrade")
+            }
+            classes["all_classes"].append(class_entry)
+
+#Adds finished core classes
+def add_core_classes(data, classes):
+    for item in data["blockArray"]:
+        if item["requirementType"] == "MAJOR":
+            for j in item['ruleArray']:
+                if j.get("labelTag") == "CORE":
+                    for k in j["ruleArray"]:
+                        class_entry = {
+                            "label": k.get("label"),
+                            "discipline": k.get('classesAppliedToRule', {}).get('classArray', [{}])[0].get("discipline", "Unknown"),
+                            "percent_complete": item.get("percentComplete", "Unknown"),
+                            "number": k.get('classesAppliedToRule', {}).get('classArray', [{}])[0].get("number", "Unknown"),
+                            "credits": k.get("creditsApplied"),
+                            "letterGrade": k.get('classesAppliedToRule', {}).get('classArray', [{}])[0].get("letterGrade", "Unknown"),
+                            "OR": [
+                                {"discipline": alt.get("discipline", "Unknown Alternative"),
+                                 "number": alt.get("number", "Unknown number")}
+                                for alt in k.get("requirement", {}).get("courseArray", [])
+                            ]
+                        }
+                        classes["core_classes"].append(class_entry)
+
+#Adds concentration course selection
+def add_concentration_classes(data, classes):
+    for item in data["blockArray"]:
+        if item["requirementType"] == "CONC":
+            for k in item['ruleArray']:
+                if "requirement" in k:
+                    for x in k.get("requirement", {}).get("courseArray", []):
+                        class_entry = {
+                            "discipline": x.get("discipline"),
+                            "number": x.get("number")
+                        }
+                        classes["all_possible_conc_classes"].append(class_entry)
