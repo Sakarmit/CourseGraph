@@ -9,7 +9,8 @@ def extract_prerequisites(prerequisites):
     ##an empty list to store the current group of prerequisites
     current_group = []
     last_connector = None
-
+    if not prerequisites:
+        return "No prerequisites found"
     ##iterating through the prerequisites
     for prereq in prerequisites:
         ##extracting the course number and subject code
@@ -37,10 +38,11 @@ with open('req.json', 'r') as file:
     data = json.load(file)
 
 ##extracting the first course
-course = data["courseInformation"]["courses"][0] 
-prerequisites = course["prerequisites"]
-
-print(extract_prerequisites(prerequisites))
+num_courses = len(data["courseInformation"]["courses"])
+for i in range(num_courses):
+    course = data["courseInformation"]["courses"][i] 
+    prerequisites = course["prerequisites"]
+    print(extract_prerequisites(prerequisites))
 
 
 
