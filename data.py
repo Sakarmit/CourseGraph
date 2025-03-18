@@ -55,7 +55,7 @@ classes = {
     }    
 #Adds finished courses
 def add_finished_courses(data, classes):
-    if "fitList" in data and "classArray" in data["fitList"]:
+    if "classInformation" in data and "classArray" in data["fitList"]:
         for classes_data in data["fitList"]["classArray"]:
             class_entry = {
                 "discipline": classes_data.get("discipline"),
