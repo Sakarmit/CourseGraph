@@ -1,69 +1,27 @@
 import json
-import requests
-import os
 
+def extract_all_classes(classes, file_path='uncached/degreeworks.json'):
+    with open(file_path) as file:
+        data = json.load(file)
+        add_finished_courses(data, classes)
+        add_core_classes(data, classes)
+        add_concentration_classes(data, classes)
 
-def extract_prerequisites(prerequisites):
-    ##an empty list to store formatted prerequisites
-    formatted = []
-    ##an empty list to store the current group of prerequisites
-    current_group = []
-    last_connector = None
-    if not prerequisites:
-        return "No prerequisites found"
-    ##iterating through the prerequisites
-    for prereq in prerequisites:
-        ##extracting the course number and subject code
-        course = f"{prereq['subjectCodePrerequisite']} {prereq['courseNumberPrerequisite']}"
-        ##extracting the connector
-        connector = prereq.get("connector", "")
-
-        if last_connector and last_connector != connector:
-            ##adding the current group to the formatted list
-            formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
-            current_group = []
-
-        ##adding the course to the current group
-        current_group.append(course)
-        last_connector = connector
-
-    ##adding the last group to the formatted list
-    if current_group:
-        formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
-
-    ##joing the formatted list of prereq options with "and" connector
-    return ' and '.join(formatted)
-
-with open('req.json', 'r') as file:
-    data = json.load(file)
-
-##extracting the first course
-num_courses = len(data["courseInformation"]["courses"])
-for i in range(num_courses):
-    course = data["courseInformation"]["courses"][i] 
-    prerequisites = course["prerequisites"]
-    print(extract_prerequisites(prerequisites))
-
-
-
-classes = {
-        "core_classes": [],
-        "gen_eds": [],
-        "conc_classes": [],  
-        "all_possible_conc_classes": [],
-        "all_classes": []
-    }    
 #Adds finished courses
 def add_finished_courses(data, classes):
-    if "classInformation" in data and "classArray" in data["fitList"]:
-        for classes_data in data["fitList"]["classArray"]:
-            class_entry = {
-                "discipline": classes_data.get("discipline"),
-                "number": classes_data.get("number"),
-                "credits": classes_data.get("credits"),
-                "letterGrade": classes_data.get("letterGrade")
-            }
-            classes["all_classes"].append(class_entry)
+    if not ("classInformation" in data and "classArray" in data["classInformation"]):
+        print("No class information in data")
+        return
+    
+    for classes_data in data["classInformation"]["classArray"]:
+        class_entry = {
+            "key": classes_data.get("discipline") + " " + classes_data.get("number"),
+            "discipline": classes_data.get("discipline"),
+            "number": classes_data.get("number"),
+            "credits": classes_data.get("credits"),
+            "letterGrade": classes_data.get("letterGrade")
+        }
+        classes["all_finished_classes"].append(class_entry)
 
 #Adds finished core classes
 def add_core_classes(data, classes):
@@ -99,3 +57,68 @@ def add_concentration_classes(data, classes):
                             "number": x.get("number")
                         }
                         classes["all_possible_conc_classes"].append(class_entry)
+
+# Extracts unique range of subjects from a multiple lists of classes
+def get_unique_subjects(*arrays):
+    subject_ranges = {}
+    for array in arrays:
+        for course in array:
+            discipline = course["discipline"]
+            # use only the first 4 characters of the course to get only the number
+            number = int(course["number"][:4])
+            if discipline not in subject_ranges:
+                subject_ranges[discipline] = [9999, 0000]
+
+            if number < subject_ranges[discipline][0]:
+                subject_ranges[discipline][0] = number
+            if number > subject_ranges[discipline][1]:
+                subject_ranges[discipline][1] = number
+
+    return subject_ranges
+
+def extract_prerequisites(prerequisites):
+    #an empty list to store formatted prerequisites
+    formatted = []
+    #an empty list to store the current group of prerequisites
+    current_group = []
+    last_connector = None
+    if not prerequisites:
+        return ""
+    #iterating through the prerequisites
+    for prereq in prerequisites:
+        if prereq['subjectCodePrerequisite'] == "":
+            continue
+
+        #extracting the course number and subject code
+        course = f"{prereq['subjectCodePrerequisite']} {prereq['courseNumberPrerequisite']}"
+        #extracting the connector
+        connector = prereq.get("connector", "")
+
+        if last_connector != None and last_connector != connector and connector == "A":
+            #adding the current group to the formatted list
+            formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
+            current_group = []
+
+        #adding the course to the current group
+        current_group.append(course)
+        last_connector = connector
+
+    if len(formatted) == 0:
+        formatted.append(f"{' or '.join(current_group)}" if last_connector == "O" else ' and '.join(current_group))
+    else:
+        formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
+    
+    #joing the formatted list of prereq options with "and" connector
+    return ' and '.join(formatted)
+
+# Splits the string of prerequisites into a array of arrays format
+def split_prereqs(prereqs):
+    if not prereqs:
+        return []
+    prereqs = prereqs.replace('(', "").replace(')', "")
+    and_split_array = prereqs.split(" and ")
+    output = []
+    for or_req in and_split_array:
+        or_split_array = or_req.split(" or ")
+        output.append(or_split_array)
+    return output

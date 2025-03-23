@@ -1,9 +1,9 @@
-##importing seleniummodules for data scraping
+#importing seleniummodules for data scraping
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-##importing modules
+#importing modules
 import json
 import os
 
@@ -25,8 +25,6 @@ def load_degree_works(browser):
         log_in_user(browser)
     # Wait for page to load
     WebDriverWait(browser, 10)
-    # Fetching degreeworks data
-    get_degrees_data(browser)
 
 """ 
     Logs in the user to the DegreeWorks page and ensure successful page load.
@@ -88,7 +86,6 @@ def get_user_info(browser):
 """
 def get_degrees_data(browser):
     student = get_user_info(browser)
-    print(student)
     # Fetch request which returns all user course data
     degreeDataFetch = f'''
     return fetch("https://degreeworks.charlotte.edu/api/audit?studentId={student['id']}&school={student['program_level']}&degree={student['program_type']}&is-process-new=false&audit-type=AA&auditId=&include-inprogress=true&include-preregistered=true&aid-term=")
@@ -102,7 +99,7 @@ def get_degrees_data(browser):
     # Saving student data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)
-        file_path = 'uncached/file.json'
+        file_path = 'uncached/degreeworks.json'
         with open(file_path, 'w+') as file:
             json.dump(result, file)
     except:
@@ -112,6 +109,17 @@ def get_degrees_data(browser):
 def get_course_prereqs(browser, subject, course_number):
     courseDataFetch = f'''
     return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={course_number}&")
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => error);
+    '''
+    result = browser.execute_script(courseDataFetch)
+    return result
+
+# Fetches the prerequisites for a range of courses in a subject
+def get_course_prereqs_range(browser, subject, range):
+    courseDataFetch = f'''
+    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={range[0]}%3A{range[1]+1}&=")
     .then(response => response.json())
     .then(data => data)
     .catch(error => error);

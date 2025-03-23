@@ -1,11 +1,6 @@
 from pyvis.network import Network
 import networkx as nx
 
-green = "#00b200"
-red = "#b20000"
-grey = "#808080"
-light_grey = "#c0c0c0"
-
 nodes_dict = {}
 
 def make_graph():
@@ -44,7 +39,7 @@ def add_node(_label, shape="box", color="#204f37",title=""):   #check if node ar
     width=width,
     height=height,
     font={'size': 20, 'color': 'white'},
-)
+    )
 
     return labelID
 
@@ -70,6 +65,9 @@ def add_edge(_from, _to, width=1, title="", arrows="to", dashes=False):  #if eit
     dashes=dashes,
 )
     
+def node_exists(_label):
+    return _label in nodes_dict.keys()
+
 def add_edges_from_dict(edges_dict):
     for _from, to_list in edges_dict.items():
         from_id = nodes_dict.get(_from, _from)
@@ -89,34 +87,6 @@ def add_edges_from_dict(edges_dict):
                 arrows = to_item.get('arrows', "to")
                 dashes = to_item.get('dashes', False)
                 add_edge(from_id, to_id, width, title, arrows, dashes)
+
 def draw_graph():
-    graph.show("ex.html", notebook=False)
-
-if __name__ == "__main__": #hard code add edges. dont do dict stuff here cause if statement will get wiped.
-    make_graph()
-
-    node1212 = add_node("ITSC 1212", color=grey)
-    node1213 = add_node("ITSC 1213", color=grey)
-    node2214 = add_node("ITSC 2214", color=green)
-    node1600 = add_node("ITSC 1600", color=green)
-    ornode = add_node("OR", shape="circle", color=light_grey)
-    node2600 = add_node("ITSC 2600", color=green)
-    node4155 = add_node("ITSC 4155", color=red)
-    node3155 = add_node("ITSC 3155", color=red)
-    node3300 = add_node("ITIS 3300", color=green)
-    node3310 = add_node("ITIS 3310", color=green)
-    ornode2 = add_node("OR", shape="circle", color=light_grey)
-
-    add_edge(node1212, node1213)
-    add_edge(node1213, node2214)
-    add_edge(node1600, ornode)
-    add_edge(node2600, ornode)
-    add_edge(node2214, node4155)
-    add_edge(node3155, ornode2)
-    add_edge(node3300, ornode2)
-    add_edge(node3310, ornode2)
-    add_edge(ornode2, node4155)
-    add_edge(node2214, node3155)
-    
-    print(nodes_dict)
-    draw_graph()
+    graph.show("ex.html")
