@@ -45,6 +45,10 @@ for course in classes["all_finished_classes"]:
     for prereq in subject_prereqs:
         if course["key"] == prereq["key"]:
             course["prerequisites"] = extract_prerequisites(prereq["prerequisites"])
+            break
+    
+    if "prerequisites" not in course:
+        course["prerequisites"] = ""
 
 graph.make_graph()
 

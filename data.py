@@ -63,6 +63,8 @@ def get_unique_subjects(*arrays):
     subject_ranges = {}
     for array in arrays:
         for course in array:
+            if "ELE" in course["number"]:
+                continue
             discipline = course["discipline"]
             # use only the first 4 characters of the course to get only the number
             number = int(course["number"][:4])
