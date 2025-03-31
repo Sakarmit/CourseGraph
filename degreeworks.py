@@ -66,13 +66,25 @@ def get_user_info(browser):
     result = browser.execute_script(userInfoFetch)
     try:
         student = {}
+        
         subpart = result['_embedded']['students'][0]
         student['id'] = subpart['id']
+        student['name'] = subpart['name']
 
         goal0 = subpart['goals'][0]
 
         student['program_level'] = goal0['school']['key']
         student['program_type'] = goal0['degree']['key']
+
+        # Saving student degree data to json file 
+        try:
+            os.makedirs('uncached', exist_ok=True)
+            file_path = 'uncached/student.json'
+            with open(file_path, 'w+') as file:
+                json.dump(result, file)
+        except:
+            print("Failed to save student data to file")
+            browser.quit()
 
         return student
     except:
@@ -96,7 +108,7 @@ def get_degrees_data(browser):
 
     result = browser.execute_script(degreeDataFetch)
 
-    # Saving student data to json file 
+    # Saving student degree data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)
         file_path = 'uncached/degreeworks.json'
