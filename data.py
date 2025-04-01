@@ -142,6 +142,16 @@ def add_all_science_gen_eds_options(data, classes):
                                 classes["gen_ed_science_without_lab"].append(gen_ed_science_without_lab)  # Add to list
     # Extracts unique range of subjects from a multiple lists of classes
 
+def add_insufficient_classes(data, classes):
+    for item in data["insufficient"].get('classArray'):
+        insufficient = {
+                "discipline": item.get("discipline"),
+                "number": item.get("number"),
+                "reasonInsufficient": item.get("reasonInsufficient"),
+
+            }
+        classes["insufficient"].append(insufficient)  # Add to list
+
 def get_unique_subjects(*arrays):
     subject_ranges = {}
     for array in arrays:
