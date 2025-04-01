@@ -57,8 +57,101 @@ def add_concentration_classes(data, classes):
                             "number": x.get("number")
                         }
                         classes["all_possible_conc_classes"].append(class_entry)
+def add_completed_gen_ed(data, classes):                        
+    for item in data["blockArray"]:
+        if item.get("requirementValue") == "GENEDNEW":
+            for k in item['ruleArray']:
+                if k.get("ruleArray") is not None and k.get("ruleArray"):
+                    if k.get("ruleArray")[0].get('classesAppliedToRule') is not None:
+                        completed_gen_ed = {
+                        "label": k.get("ruleArray")[0].get("label"),
+                        "discipline": k['ruleArray'][0]['classesAppliedToRule'].get('classArray')[0].get('discipline'),
+                        "number": k['ruleArray'][0]['classesAppliedToRule'].get('classArray')[0].get('number'),
+                        "credits": k['ruleArray'][0]['classesAppliedToRule'].get('classArray')[0].get('credits'),
+                        "letterGrade": k['ruleArray'][0]['classesAppliedToRule'].get('classArray')[0].get('letterGrade')
+                            }
+                        classes["completed_gen_ed"].append(completed_gen_ed)  # Add to list                                       
+    for item in data["blockArray"]:
+        if item.get("requirementValue") == "GENEDNEW":
+            for k in item['ruleArray']:
+        # Mathematical and Logical Reasoning
+                if k.get("ruleArray") is not None and k.get("ruleArray"):
+                    if k.get('label') == 'DEVELOPMENT OF FUNDAMENTAL SKILLS OF INQUIRY':
+                        for x in k.get("ruleArray"):
+                            if x.get('label') == "Mathematical and Logical Reasoning":
+                                for y in x.get('ruleArray'):
+                                    completed_gen_ed = {
+                                    "label": y.get('label'),
+                                    "discipline": y.get('classesAppliedToRule').get('classArray')[0].get('discipline'),
+                                    "number": y.get('classesAppliedToRule').get('classArray')[0].get('number'),
+                                    "credits": y.get('classesAppliedToRule').get('classArray')[0].get('credits'),
+                                    "letterGrade": y.get('classesAppliedToRule').get('classArray')[0].get('letterGrade')
+                                        }
 
-# Extracts unique range of subjects from a multiple lists of classes
+                                    classes["completed_gen_ed"].append(completed_gen_ed)  # Add to list
+#completed science with/without labs courses
+    for item in data["blockArray"]:
+        if item.get("requirementValue") == "GENEDNEW":
+            for k in item['ruleArray']:
+                if k.get('label') == 'Sciences':
+                    for science_class in k.get('ruleArray'):
+                        if science_class.get('label') == 'Sciences With Lab':
+                            for nolab in science_class.get('ruleArray'):
+                                if nolab.get('classesAppliedToRule').get('classArray') is not None:
+                                    completed_gen_ed = {
+                                    "label": nolab.get('label'),
+                                    "discipline": nolab.get('classesAppliedToRule').get('classArray')[0].get('discipline'),
+                                    "number": nolab.get('classesAppliedToRule').get('classArray')[0].get('number'),
+                                    "credits": nolab.get('classesAppliedToRule').get('classArray')[0].get('credits'),
+                                    "letterGrade": nolab.get('classesAppliedToRule').get('classArray')[0].get('letterGrade')
+                                    }
+                                    classes["completed_gen_ed"].append(completed_gen_ed)  # Add to list
+                            if science_class.get('label') == 'Sciences Without Lab':
+                                for nolab in science_class.get('ruleArray'):
+                                    if nolab.get('classesAppliedToRule').get('classArray') is not None:
+                                        completed_gen_ed = {
+                                        "label": nolab.get('label'),
+                                        "discipline": nolab.get('classesAppliedToRule').get('classArray')[0].get('discipline'),
+                                        "number": nolab.get('classesAppliedToRule').get('classArray')[0].get('number'),
+                                        "credits": nolab.get('classesAppliedToRule').get('classArray')[0].get('credits'),
+                                        "letterGrade": nolab.get('classesAppliedToRule').get('classArray')[0].get('letterGrade')
+                                        }
+                                        classes["completed_gen_ed"].append(completed_gen_ed)  # Add to list
+def add_all_science_gen_eds_options(data, classes):
+#all possible science with/without lab
+    for item in data["blockArray"]:
+        if item.get("requirementValue") == "GENEDNEW":
+            for k in item['ruleArray']:
+                if k.get('label') == 'Sciences':
+                    for science_class in k.get('ruleArray'):
+                        if science_class.get('label') == 'Sciences With Lab':
+                            for nolab in science_class.get('ruleArray'):
+                                gen_ed_science_with_lab = {
+                                "label": nolab.get('label'),
+                                "discipline": nolab.get('requirement').get('courseArray')[0].get('discipline'),
+                                "number": nolab.get('requirement').get('courseArray')[0].get('number'),
+                                    }
+                                classes["gen_ed_science_with_lab"].append(gen_ed_science_with_lab)  # Add to list
+                        if science_class.get('label') == 'Sciences Without Lab':
+                            for nolab in science_class.get('ruleArray'):
+                                gen_ed_science_without_lab = {
+                                "label": nolab.get('label'),
+                                "discipline": nolab.get('requirement').get('courseArray')[0].get('discipline'),
+                                "number": nolab.get('requirement').get('courseArray')[0].get('number'),
+                                    }
+                                classes["gen_ed_science_without_lab"].append(gen_ed_science_without_lab)  # Add to list
+    # Extracts unique range of subjects from a multiple lists of classes
+
+def add_insufficient_classes(data, classes):
+    for item in data["insufficient"].get('classArray'):
+        insufficient = {
+                "discipline": item.get("discipline"),
+                "number": item.get("number"),
+                "reasonInsufficient": item.get("reasonInsufficient"),
+
+            }
+        classes["insufficient"].append(insufficient)  # Add to list
+
 def get_unique_subjects(*arrays):
     subject_ranges = {}
     for array in arrays:
