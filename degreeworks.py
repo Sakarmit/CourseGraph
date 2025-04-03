@@ -76,16 +76,6 @@ def get_user_info(browser):
         student['program_level'] = goal0['school']['key']
         student['program_type'] = goal0['degree']['key']
 
-        # Saving student degree data to json file 
-        try:
-            os.makedirs('uncached', exist_ok=True)
-            file_path = 'uncached/student.json'
-            with open(file_path, 'w+') as file:
-                json.dump(result, file)
-        except:
-            print("Failed to save student data to file")
-            browser.quit()
-
         return student
     except:
         print("Failed to get user info")
@@ -107,6 +97,19 @@ def get_degrees_data(browser):
     '''
 
     result = browser.execute_script(degreeDataFetch)
+
+    # Add extra data to student object
+    student['gpa'] = result['auditHeader']['studentSystemGpa']
+
+    # Saving student degree data to json file 
+    try:
+        os.makedirs('uncached', exist_ok=True)
+        file_path = 'uncached/student.json'
+        with open(file_path, 'w+') as file:
+            json.dump(result, file)
+    except:
+        print("Failed to save student data to file")
+        browser.quit()
 
     # Saving student degree data to json file 
     try:
