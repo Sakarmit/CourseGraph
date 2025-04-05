@@ -12,11 +12,9 @@ load_degree_works(browser)
 get_degrees_data(browser)
 
 classes = {
-    "core_classes": [],
-    "gen_eds": [],
-    "conc_classes": [],  
-    "all_possible_conc_classes": [],
-    "all_finished_classes": []
+    "requirements": [],
+    "all_finished_classes": [],
+    'insufficient': []
 }
 
 # Extract courses from degreeworks.json and store them in classes dictionary
