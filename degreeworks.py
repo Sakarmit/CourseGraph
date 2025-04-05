@@ -106,7 +106,7 @@ def get_degrees_data(browser):
         os.makedirs('uncached', exist_ok=True)
         file_path = 'uncached/student.json'
         with open(file_path, 'w+') as file:
-            json.dump(result, file)
+            json.dump(student, file)
     except:
         print("Failed to save student data to file")
         browser.quit()
