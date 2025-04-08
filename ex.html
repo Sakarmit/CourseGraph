@@ -6,6 +6,9 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             
+                <link href="lib/tom-select/tom-select.css" rel="stylesheet">
+                <script src="lib/tom-select/tom-select.complete.min.js"></script>
+            
         
 <center>
 <h1></h1>
@@ -52,6 +55,128 @@
     <body>
         <div class="card" style="width: 100%">
             
+                <div id="select-menu" class="card-header">
+                    <div class="row no-gutters">
+                        <div class="col-10 pb-2">
+                            <select
+                            class="form-select"
+                            aria-label="Default select example"
+                            onchange="selectNode([value]);"
+                            id="select-node"
+                            placeholder="Select node..."
+                            >
+                                <option selected>Select a Node by ID</option>
+                                
+                                    <option value="ANTH 1101">ANTH 1101</option>
+                                
+                                    <option value="BUSN 1101">BUSN 1101</option>
+                                
+                                    <option value="ECGR 2103">ECGR 2103</option>
+                                
+                                    <option value="ECGR 2104">ECGR 2104</option>
+                                
+                                    <option value="ECGR 2181">ECGR 2181</option>
+                                
+                                    <option value="ESCI 1101">ESCI 1101</option>
+                                
+                                    <option value="INFO 2130">INFO 2130</option>
+                                
+                                    <option value="ITCS 3153">ITCS 3153</option>
+                                
+                                    <option value="ITCS 3156">ITCS 3156</option>
+                                
+                                    <option value="ITCS 3160">ITCS 3160</option>
+                                
+                                    <option value="ITCS 3162">ITCS 3162</option>
+                                
+                                    <option value="ITCS 3190">ITCS 3190</option>
+                                
+                                    <option value="ITCS 4122">ITCS 4122</option>
+                                
+                                    <option value="ITCS 4152">ITCS 4152</option>
+                                
+                                    <option value="ITIS 3135">ITIS 3135</option>
+                                
+                                    <option value="ITIS 3246">ITIS 3246</option>
+                                
+                                    <option value="ITIS 4340">ITIS 4340</option>
+                                
+                                    <option value="ITSC 1212">ITSC 1212</option>
+                                
+                                    <option value="ITSC 1213">ITSC 1213</option>
+                                
+                                    <option value="ITSC 2175">ITSC 2175</option>
+                                
+                                    <option value="ITSC 2181">ITSC 2181</option>
+                                
+                                    <option value="ITSC 218121">ITSC 218121</option>
+                                
+                                    <option value="ITSC 2214">ITSC 2214</option>
+                                
+                                    <option value="ITSC 2600">ITSC 2600</option>
+                                
+                                    <option value="ITSC 3146">ITSC 3146</option>
+                                
+                                    <option value="ITSC 3155">ITSC 3155</option>
+                                
+                                    <option value="ITSC 3688">ITSC 3688</option>
+                                
+                                    <option value="ITSC 4155">ITSC 4155</option>
+                                
+                                    <option value="LBST 1103">LBST 1103</option>
+                                
+                                    <option value="LBST 2213">LBST 2213</option>
+                                
+                                    <option value="LBST 2301">LBST 2301</option>
+                                
+                                    <option value="MATH 1120">MATH 1120</option>
+                                
+                                    <option value="MATH 1241">MATH 1241</option>
+                                
+                                    <option value="MATH 1242">MATH 1242</option>
+                                
+                                    <option value="MATH 1ELE">MATH 1ELE</option>
+                                
+                                    <option value="MATH 2164">MATH 2164</option>
+                                
+                                    <option value="MATH 216436">MATH 216436</option>
+                                
+                                    <option value="METR 1102">METR 1102</option>
+                                
+                                    <option value="METR 1102L">METR 1102L</option>
+                                
+                                    <option value="MUPF 1114">MUPF 1114</option>
+                                
+                                    <option value="PHIL 1001">PHIL 1001</option>
+                                
+                                    <option value="RELS 1502">RELS 1502</option>
+                                
+                                    <option value="SPAN 1201">SPAN 1201</option>
+                                
+                                    <option value="SPAN 1202">SPAN 1202</option>
+                                
+                                    <option value="STAT 2122">STAT 2122</option>
+                                
+                                    <option value="TRNF 1ELE">TRNF 1ELE</option>
+                                
+                                    <option value="UWRT 1103">UWRT 1103</option>
+                                
+                                    <option value="OR">OR</option>
+                                
+                                    <option value="MATH 1100">MATH 1100</option>
+                                
+                                    <option value="MATH 1101">MATH 1101</option>
+                                
+                                    <option value="MATH 1103">MATH 1103</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-2 pb-2">
+                            <button type="button" class="btn btn-primary btn-block" onclick="neighbourhoodHighlight({nodes: []});">Reset Selection</button>
+                        </div>
+                    </div>
+                </div>
+            
             
             <div id="mynetwork" class="card-body"></div>
         </div>
@@ -78,6 +203,14 @@
               };
 
               
+                  new TomSelect("#select-node",{
+                      create: false,
+                      sortField: {
+                          field: "text",
+                          direction: "asc"
+                      }
+                  });
+              
 
               
 
@@ -88,8 +221,8 @@
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ANTH 1101", "label": "ANTH 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "BUSN 1101", "label": "BUSN 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2103", "label": "ECGR 2103", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2104", "label": "ECGR 2104", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2181", "label": "ECGR 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ESCI 1101", "label": "ESCI 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "INFO 2130", "label": "INFO 2130", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3153", "label": "ITCS 3153", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3156", "label": "ITCS 3156", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3160", "label": "ITCS 3160", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3162", "label": "ITCS 3162", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3190", "label": "ITCS 3190", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 4122", "label": "ITCS 4122", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 4152", "label": "ITCS 4152", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 3135", "label": "ITIS 3135", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 3246", "label": "ITIS 3246", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 4340", "label": "ITIS 4340", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 1212", "label": "ITSC 1212", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 1213", "label": "ITSC 1213", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2175", "label": "ITSC 2175", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2181", "label": "ITSC 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 218121", "label": "ITSC 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2214", "label": "ITSC 2214", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2600", "label": "ITSC 2600", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3146", "label": "ITSC 3146", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3155", "label": "ITSC 3155", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3688", "label": "ITSC 3688", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 4155", "label": "ITSC 4155", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 1103", "label": "LBST 1103", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 2213", "label": "LBST 2213", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 2301", "label": "LBST 2301", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1120", "label": "MATH 1120", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1241", "label": "MATH 1241", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1242", "label": "MATH 1242", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1ELE", "label": "MATH 1ELE", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 2164", "label": "MATH 2164", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 216436", "label": "MATH 2164", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "METR 1102", "label": "METR 1102", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "METR 1102L", "label": "METR 1102L", "shape": "box", "width": 120}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MUPF 1114", "label": "MUPF 1114", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "PHIL 1001", "label": "PHIL 1001", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "RELS 1502", "label": "RELS 1502", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "SPAN 1201", "label": "SPAN 1201", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "SPAN 1202", "label": "SPAN 1202", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "STAT 2122", "label": "STAT 2122", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "TRNF 1ELE", "label": "TRNF 1ELE", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "UWRT 1103", "label": "UWRT 1103", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ENGR 1302", "label": "ENGR 1302", "shape": "box", "width": 110}, {"color": "#c0c0c0", "font": {"color": "white", "size": 20}, "height": 50, "id": "OR", "label": "OR", "shape": "circle", "width": 50}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1100", "label": "MATH 1100", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1101", "label": "MATH 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1103", "label": "MATH 1103", "shape": "box", "width": 110}]);
-                  edges = new vis.DataSet([{"arrows": "to", "dashes": false, "from": "ECGR 2104", "title": "", "to": "ECGR 2103", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2104", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2181", "title": "", "to": "ENGR 1302", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2181", "title": "", "to": "ECGR 2103", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2181", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "MATH 2164", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "MATH 2164", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3160", "title": "", "to": "ITSC 1213", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3162", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3190", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 4122", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 4152", "title": "", "to": "ITCS 3156", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 3135", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 3246", "title": "", "to": "ITSC 3146", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 4340", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2181", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2214", "title": "", "to": "ITSC 1213", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3146", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3146", "title": "", "to": "ITSC 2181", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3155", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 4155", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 4155", "title": "", "to": "ITSC 3155", "width": 1}, {"arrows": "to", "dashes": false, "from": "LBST 2301", "title": "", "to": "UWRT 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1120", "title": "", "to": "OR", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1100", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1101", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1241", "title": "", "to": "MATH 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1242", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 2164", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 2164", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "SPAN 1202", "title": "", "to": "SPAN 1201", "width": 1}, {"arrows": "to", "dashes": false, "from": "STAT 2122", "title": "", "to": "MATH 1242", "width": 1}]);
+                  nodes = new vis.DataSet([{"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ANTH 1101", "label": "ANTH 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "BUSN 1101", "label": "BUSN 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2103", "label": "ECGR 2103", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2104", "label": "ECGR 2104", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ECGR 2181", "label": "ECGR 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ESCI 1101", "label": "ESCI 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "INFO 2130", "label": "INFO 2130", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3153", "label": "ITCS 3153", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3156", "label": "ITCS 3156", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3160", "label": "ITCS 3160", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3162", "label": "ITCS 3162", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 3190", "label": "ITCS 3190", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 4122", "label": "ITCS 4122", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITCS 4152", "label": "ITCS 4152", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 3135", "label": "ITIS 3135", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 3246", "label": "ITIS 3246", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITIS 4340", "label": "ITIS 4340", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 1212", "label": "ITSC 1212", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 1213", "label": "ITSC 1213", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2175", "label": "ITSC 2175", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2181", "label": "ITSC 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 218121", "label": "ITSC 2181", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2214", "label": "ITSC 2214", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 2600", "label": "ITSC 2600", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3146", "label": "ITSC 3146", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3155", "label": "ITSC 3155", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 3688", "label": "ITSC 3688", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "ITSC 4155", "label": "ITSC 4155", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 1103", "label": "LBST 1103", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 2213", "label": "LBST 2213", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "LBST 2301", "label": "LBST 2301", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1120", "label": "MATH 1120", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1241", "label": "MATH 1241", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1242", "label": "MATH 1242", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1ELE", "label": "MATH 1ELE", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 2164", "label": "MATH 2164", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 216436", "label": "MATH 2164", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "METR 1102", "label": "METR 1102", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "METR 1102L", "label": "METR 1102L", "shape": "box", "width": 120}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MUPF 1114", "label": "MUPF 1114", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "PHIL 1001", "label": "PHIL 1001", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "RELS 1502", "label": "RELS 1502", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "SPAN 1201", "label": "SPAN 1201", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "SPAN 1202", "label": "SPAN 1202", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "STAT 2122", "label": "STAT 2122", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "TRNF 1ELE", "label": "TRNF 1ELE", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "UWRT 1103", "label": "UWRT 1103", "shape": "box", "width": 110}, {"color": "#c0c0c0", "font": {"color": "white", "size": 20}, "height": 50, "id": "OR", "label": "OR", "shape": "circle", "width": 50}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1100", "label": "MATH 1100", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1101", "label": "MATH 1101", "shape": "box", "width": 110}, {"color": "#204f37", "font": {"color": "white", "size": 20}, "height": 50, "id": "MATH 1103", "label": "MATH 1103", "shape": "box", "width": 110}]);
+                  edges = new vis.DataSet([{"arrows": "to", "dashes": false, "from": "ECGR 2104", "title": "", "to": "ECGR 2103", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2104", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2181", "title": "", "to": "ECGR 2103", "width": 1}, {"arrows": "to", "dashes": false, "from": "ECGR 2181", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "MATH 2164", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3153", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3156", "title": "", "to": "MATH 2164", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3160", "title": "", "to": "ITSC 1213", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3162", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 3190", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 4122", "title": "", "to": "STAT 2122", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITCS 4152", "title": "", "to": "ITCS 3156", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 3135", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 3246", "title": "", "to": "ITSC 3146", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITIS 4340", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 1213", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2175", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2181", "title": "", "to": "ITSC 1212", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 2214", "title": "", "to": "ITSC 1213", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3146", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3146", "title": "", "to": "ITSC 2181", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 3155", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 4155", "title": "", "to": "ITSC 2214", "width": 1}, {"arrows": "to", "dashes": false, "from": "ITSC 4155", "title": "", "to": "ITSC 3155", "width": 1}, {"arrows": "to", "dashes": false, "from": "LBST 2301", "title": "", "to": "UWRT 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1120", "title": "", "to": "OR", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1100", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1101", "width": 1}, {"arrows": "to", "dashes": false, "from": "OR", "title": "", "to": "MATH 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1241", "title": "", "to": "MATH 1103", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 1242", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 2164", "title": "", "to": "MATH 1120", "width": 1}, {"arrows": "to", "dashes": false, "from": "MATH 2164", "title": "", "to": "MATH 1241", "width": 1}, {"arrows": "to", "dashes": false, "from": "SPAN 1202", "title": "", "to": "SPAN 1201", "width": 1}, {"arrows": "to", "dashes": false, "from": "STAT 2122", "title": "", "to": "MATH 1242", "width": 1}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });
@@ -147,6 +280,8 @@
 
                   
 
+                  
+                    network.on("selectNode", neighbourhoodHighlight);
                   
 
                   

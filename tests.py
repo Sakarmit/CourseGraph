@@ -1,5 +1,10 @@
 import unittest
 import graph
+import data
+from unittest.mock import patch, mock_open
+import json
+import data
+
 
 #Unit testing for graph.py
 class TestGraphFunctions(unittest.TestCase):
@@ -47,6 +52,105 @@ class TestGraphFunctions(unittest.TestCase):
 
     def test_node_exists_false(self):
         self.assertFalse(graph.node_exists("FakeNode"))
+
+
+class TestDataExtraction(unittest.TestCase):
+
+    def test_courseString(self):
+        course = {"discipline": "CS", "number": "1010"}
+        self.assertEqual(data.courseString(course), "CS 1010")
+
+    def test_courseArray_to_string_no_connector(self):
+        courseArray = [{"discipline": "CS", "number": "1010"}, {"discipline": "MATH", "number": "1241"}]
+        self.assertEqual(data.courseArray_to_string(courseArray), "CS 1010, MATH 1241")
+
+    def test_courseArray_to_string_with_connector(self):
+        courseArray = [{"discipline": "CS", "number": "1010"}, {"discipline": "MATH", "number": "1241"}]
+        self.assertEqual(data.courseArray_to_string(courseArray, "or"), "CS 1010 or MATH 1241")
+
+    def test_format_requirement(self):
+        requirement = {
+            "label": "Some Req",
+            "percentComplete": "80%",
+            "classesAppliedToRule": {"classArray": [{"discipline": "CS", "number": "1010"}]},
+            "requirement": {"courseArray": [{"discipline": "MATH", "number": "1241"}]},
+        }
+        expected = {
+            "label": "Some Req",
+            "applied": "CS 1010",
+            "percent_complete": "80%",
+            "required": "MATH 1241"
+        }
+        self.assertEqual(data.format_requirement(requirement), expected)
+
+    def test_get_unique_subjects(self):
+        arr1 = [{"discipline": "CS", "number": "1010"}, {"discipline": "CS", "number": "2010"}]
+        arr2 = [{"discipline": "MATH", "number": "1241"}]
+        expected = {"CS": [1010, 2010], "MATH": [1241, 1241]}
+        self.assertEqual(data.get_unique_subjects(arr1, arr2), expected)
+
+    def test_extract_prerequisites_and_or_logic(self):
+        prereqs = [
+            {"subjectCodePrerequisite": "CS", "courseNumberPrerequisite": "1010", "connector": "O"},
+            {"subjectCodePrerequisite": "MATH", "courseNumberPrerequisite": "1241", "connector": "A"},
+            {"subjectCodePrerequisite": "PHYS", "courseNumberPrerequisite": "1101", "connector": ""}
+        ]
+        result = data.extract_prerequisites(prereqs)
+        self.assertEqual(result, "(CS 1010) and MATH 1241 and PHYS 1101")
+    def test_extract_prerequisites_empty(self):
+        self.assertEqual(data.extract_prerequisites([]), "")
+
+    def test_split_prereqs(self):
+        prereq_str = "(CS 1010 or MATH 1241) and PHYS 1101"
+        expected = [["CS 1010", "MATH 1241"], ["PHYS 1101"]]
+        self.assertEqual(data.split_prereqs(prereq_str), expected)
+
+    def test_add_finished_courses(self):
+        input_data = {
+            "classInformation": {
+                "classArray": [
+                    {"discipline": "CS", "number": "1010", "credits": 3, "letterGrade": "A"},
+                    {"discipline": "MATH", "number": "1241", "credits": 4, "letterGrade": "B"}
+                ]
+            }
+        }
+        classes = {"all_finished_classes": []}
+        data.add_finished_courses(input_data, classes)
+        self.assertEqual(len(classes["all_finished_classes"]), 2)
+        self.assertEqual(classes["all_finished_classes"][0]["key"], "CS 1010")
+
+    def test_add_insufficient_classes(self):
+        input_data = {
+            "insufficient": {
+                "classArray": [
+                    {"discipline": "CS", "number": "1010", "reasonInsufficient": "Low grade"}
+                ]
+            }
+        }
+        classes = {"insufficient": []}
+        data.add_insufficient_classes(input_data, classes)
+        self.assertEqual(classes["insufficient"][0]["reasonInsufficient"], "Low grade")
+
+    @patch("builtins.open", new_callable=mock_open, read_data=json.dumps({
+        "classInformation": {"classArray": []},
+        "blockArray": [],
+        "insufficient": {"classArray": []}
+    }))
+    @patch("json.load")
+    def test_extract_all_classes(self, mock_json_load, mock_file):
+        mock_json_load.return_value = {
+            "classInformation": {"classArray": []},
+            "blockArray": [],
+            "insufficient": {"classArray": []}
+        }
+        classes = {
+            "all_finished_classes": [],
+            "requirements": [],
+            "insufficient": []
+        }
+        data.extract_all_classes(classes)
+        self.assertIn("all_finished_classes", classes)
+        self.assertEqual(len(classes["all_finished_classes"]), 0)
 
 if __name__ == '__main__':
     unittest.main()
