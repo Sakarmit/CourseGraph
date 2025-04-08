@@ -29,7 +29,9 @@ def courseString(course):
 def courseArray_to_string(courseArray, connector=None):
     simplified = []
     for course in courseArray:
-        simplified.append(courseString(course))
+        string_course = courseString(course)
+        if string_course not in simplified:
+            simplified.append(string_course)
     return ", ".join(simplified) if connector == None else f" {connector} ".join(simplified)
 
 def format_requirement(requirement):
@@ -71,7 +73,7 @@ def add_required_classes(data, classes):
                                         applied.append(courseString(apply))
                                     if len(rule) < 2:
                                         continue
-                                    rules.append(f"({courseArray_to_string(rule, "and" if "With Lab" in k.get("label") else "or")})")
+                                    rules.append(f'({courseArray_to_string(rule, "and" if "With Lab" in k.get("label") else "or")})')
                                 classes["requirements"].append({
                                     "label": k.get("label"),
                                     "applied": " and ".join(applied),
