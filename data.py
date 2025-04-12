@@ -35,12 +35,19 @@ def courseArray_to_string(courseArray, connector=None):
     return ", ".join(simplified) if connector == None else f" {connector} ".join(simplified)
 
 def format_requirement(requirement):
-    return {
+    subRequirement = requirement.get("requirement", {})
+    returnDict = {
         "label": requirement.get("label"),
         "applied": courseArray_to_string(requirement.get("classesAppliedToRule", {}).get("classArray", []), "and"),
         "percent_complete": requirement.get("percentComplete", "Unknown"),
-        "required": courseArray_to_string(requirement.get("requirement", {}).get("courseArray", []), "or")
+        "required": courseArray_to_string(subRequirement.get("courseArray", []), "or")
     }
+    if subRequirement.get("classesBegin") is not None:
+        returnDict["remaining_course_count"] = int(subRequirement.get("classesBegin")) - int(requirement.get("classesApplied"))
+    else:
+        returnDict["remaining_credit_count"] = int(subRequirement.get("creditsBegin")) - int(requirement.get("creditsApplied"))
+
+    return returnDict
 
 def add_required_classes(data, classes):
     for item in data["blockArray"]:
@@ -78,7 +85,8 @@ def add_required_classes(data, classes):
                                     "label": k.get("label"),
                                     "applied": " and ".join(applied),
                                     "percent_complete": k.get("percentComplete", "Unknown"),
-                                    "rule": " or ".join(rules),
+                                    "required": " or ".join(rules),
+                                    "remaining_course_count": (2 if "With Lab" in k.get("label") else 1) - len(applied),
                                     "master": item["requirementValue"]
                                 })
                             else:
