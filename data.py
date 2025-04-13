@@ -186,3 +186,15 @@ def split_prereqs(prereqs):
         or_split_array = or_req.split(" or ")
         output.append(or_split_array)
     return output
+
+# Split the string of requirements into a list of requirements
+def split_requirements(requirements):
+    if not requirements:
+        return []
+    requirements = requirements.replace('(', "").replace(')', "")
+    and_split_array = requirements.split(" or ")
+    output = []
+    for or_req in and_split_array:
+        or_split_array = or_req.split(" and ")
+        output.append(or_split_array)
+    return output

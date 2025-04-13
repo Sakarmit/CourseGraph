@@ -1,7 +1,7 @@
 import json
 import os
 from browser import create_browser_instance
-from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs
+from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs, split_requirements
 from degreeworks import get_course_prereqs_range, get_degrees_data, load_degree_works
 import graph
 
@@ -57,7 +57,33 @@ light_grey = "#c0c0c0"
 
 # Add all finished classes to the graph
 for course in classes["all_finished_classes"]:
-    graph.add_node(course["key"])
+    graph.add_node(course["key"], color=grey)
+
+# Add incomplete requirements to the graph
+for req in classes["requirements"]:
+    if req.get("remaining_course_count", req.get("remaining_credit_count", 0)) == 0:
+        continue
+
+    courses = split_requirements(req.get("required", []))
+    if len(courses) == 1:
+        if len(courses[0]) == 1:
+            graph.add_node_if_not_exists(courses[0][0], color=green)
+            continue
+        and_node = graph.add_node("AND", shape="circle", color=light_grey)
+        for r in courses[0]:
+            graph.add_node_with_edge(r, color=green, _to=and_node)
+    else:
+        or_node = graph.add_node("OR", shape="circle", color=light_grey)
+        for subReqs in courses:
+            if len(subReqs) == 1:
+                string = subReqs[0]
+                graph.add_node_with_edge(string, color=green, _to=or_node)
+                continue
+
+            and_node = graph.add_node("AND", shape="circle", color=light_grey)
+            graph.add_edge(or_node, and_node)
+            for r in subReqs:
+                graph.add_node_with_edge(r, color=green, _to=and_node)
 
 # Add all prerequisites to the graph
 for course in classes["all_finished_classes"]:
@@ -67,9 +93,7 @@ for course in classes["all_finished_classes"]:
     edges = split_prereqs(course["prerequisites"])
     for req in edges:
         if len(req) == 1:
-            if not graph.node_exists(req[0]):
-                graph.add_node(req[0])
-            graph.add_edge(course["key"], req[0])
+            graph.add_node_with_edge(req[0], color=light_grey, _to=course["key"])
             continue
         
         for r in req:
@@ -87,9 +111,7 @@ for course in classes["all_finished_classes"]:
             or_node = graph.add_node("OR", shape="circle", color=light_grey)
             graph.add_edge(course["key"], or_node)
             for r in req:
-                if not graph.node_exists(r):
-                    graph.add_node(r)
-                graph.add_edge(or_node, r)
+                graph.add_node_with_edge(r, color=light_grey, _to=or_node)
 
 try:
     file_path = 'uncached/temp.json'
