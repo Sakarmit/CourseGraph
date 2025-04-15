@@ -100,6 +100,9 @@ def get_degrees_data(browser):
 
     # Add extra data to student object
     student['gpa'] = result['auditHeader']['studentSystemGpa']
+    
+    add_withdrawal_failures_to_student(student, result)
+
 
     # Saving student degree data to json file 
     try:
@@ -141,3 +144,19 @@ def get_course_prereqs_range(browser, subject, range):
     '''
     result = browser.execute_script(courseDataFetch)
     return result
+
+def add_withdrawal_failures_to_student(student, audit_data):
+    # Get the classArray from 'insufficient' section
+    classes = audit_data.get("insufficient", {}).get("classArray", [])
+
+    # Fallback: if classArray isn't there, use the root-level classArray
+    if not classes:
+        classes = audit_data.get("classArray", [])
+
+    # Count grades
+    num_withdrawals = sum(1 for c in classes if c.get("letterGrade") == "W")
+    num_qf = sum(1 for c in classes if c.get("letterGrade") == "QF")
+
+    # Add to student dict
+    student["withdrawals"] = num_withdrawals
+    student["failures"] = num_qf
