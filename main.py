@@ -20,7 +20,7 @@ classes = {
 # Extract courses from degreeworks.json and store them in classes dictionary
 extract_all_classes(classes)
 
-# Extract unique range of subjects from classes dictionary
+# Extract unique range of subjects from finished classes in classes dictionary
 subject_range = get_unique_subjects(classes["all_finished_classes"])
 
 # Retrieve all prerequisites for all courses in the subject range
@@ -48,7 +48,7 @@ for course in classes["all_finished_classes"]:
 
 # Add incomplete requirements to the graph
 for req in classes["requirements"]:
-    if req.get("remaining_course_count", req.get("remaining_credit_count", 0)) == 0:
+    if req.get("remaining_course_count", req.get("remaining_credit_count", 0)) <= 0:
         continue
 
     courses = split_requirements(req.get("required", []))
@@ -114,7 +114,7 @@ try:
     with open(file_path, 'w+') as file:
         json.dump(classes, file)
 except:
-    print("Failed to save AHHHHHH!!!")
+    print("Failed to save")
     browser.quit()        
 
 graph.draw_graph()
