@@ -1,4 +1,5 @@
 #importing seleniummodules for data scraping
+from file import add_student_data
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -103,7 +104,7 @@ def get_degrees_data(browser):
     
     add_withdrawal_failures_to_student(student, result)
 
-
+    add_student_data(student)
     # Saving student degree data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)

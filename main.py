@@ -108,6 +108,7 @@ for course in classes["all_finished_classes"]:
             for r in req:
                 graph.add_node_with_edge(r, color=light_grey, _to=or_node)
 
+
 try:
     file_path = 'uncached/temp.json'
     print("SUCCESS")
