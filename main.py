@@ -35,19 +35,6 @@ for subject in subject_range:
             "prerequisites": course["prerequisites"]
         })
 
-# Update all prerequisites for each finished course
-for course in classes["all_finished_classes"]:
-    if "prerequisites" in course:
-        continue
-
-    for prereq in subject_prereqs:
-        if course["key"] == prereq["key"]:
-            course["prerequisites"] = extract_prerequisites(prereq["prerequisites"])
-            break
-    
-    if "prerequisites" not in course:
-        course["prerequisites"] = ""
-
 graph.make_graph()
 
 green = "#00b200"
@@ -56,7 +43,7 @@ grey = "#808080"
 light_grey = "#c0c0c0"
 
 # Add all finished classes to the graph
-for course in classes["all_finished_classes"]:
+for course in classes["all_finished_classes"]:    
     graph.add_node(course["key"], color=grey)
 
 # Add incomplete requirements to the graph
@@ -87,6 +74,14 @@ for req in classes["requirements"]:
 
 # Add all prerequisites to the graph
 for course in classes["all_finished_classes"]:
+    if "prerequisites" not in course:
+        course["prerequisites"] = ""
+
+        for prereq in subject_prereqs:
+            if course["key"] == prereq["key"]:
+                course["prerequisites"] = extract_prerequisites(prereq["prerequisites"])
+                break
+
     if course["prerequisites"] == "":
         continue
 
