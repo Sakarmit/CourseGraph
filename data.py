@@ -26,20 +26,45 @@ def add_finished_courses(data, classes):
 def courseString(course):
     return f"{course.get('discipline')} {course.get('number')}"
 
+# List of courses that are not to be displayed
+banned_courses = [" ", "@ @"]
+
 def courseArray_to_string(courseArray, connector=None):
     simplified = []
     for course in courseArray:
-        simplified.append(courseString(course))
+        string_course = courseString(course)
+        if string_course not in simplified and string_course not in banned_courses:
+            simplified.append(string_course)
     return ", ".join(simplified) if connector == None else f" {connector} ".join(simplified)
 
 def format_requirement(requirement):
-    return {
+    subRequirement = requirement.get("requirement", {})
+    returnDict = {
         "label": requirement.get("label"),
         "applied": courseArray_to_string(requirement.get("classesAppliedToRule", {}).get("classArray", []), "and"),
         "percent_complete": requirement.get("percentComplete", "Unknown"),
-        "required": courseArray_to_string(requirement.get("requirement", {}).get("courseArray", []), "or")
+        "required": courseArray_to_string(subRequirement.get("courseArray", []), "or")
     }
+    if subRequirement.get("classesBegin") is not None:
+        returnDict["remaining_course_count"] = int(subRequirement.get("classesBegin")) - int(requirement.get("classesApplied"))
+    else:
+        returnDict["remaining_credit_count"] = int(subRequirement.get("creditsBegin")) - int(requirement.get("creditsApplied"))
 
+    return returnDict
+
+# This function recursively evaluates the boolean evaluation of the requirement resulting in a list of requirements
+def boolean_evaluation(requirement):
+    resultRequirements = []
+    req = requirement.get("requirement", {}).get("ifPart" if requirement.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
+    for i in req:
+        if i.get("booleanEvaluation") == None:
+            if len(i.get("requirement", {}).get("courseArray", [])) == 0:
+                continue
+            resultRequirements.append(i)
+        else:
+            resultRequirements.extend(boolean_evaluation(i))
+
+    return resultRequirements
 def add_required_classes(data, classes):
     for item in data["blockArray"]:
         if item["requirementType"] in ["MAJOR", "CONC", "MINOR"]:
@@ -51,9 +76,7 @@ def add_required_classes(data, classes):
                     elif j.get("classesAppliedToRule") is not None:
                         classes["requirements"].append({**format_requirement(j), "master": item["requirementType"]})
                 else:
-                    req = j.get("requirement", {}).get("ifPart" if j.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
-
-                    for k in req:
+                    for k in boolean_evaluation(j):
                         if len(k.get("requirement", {}).get("courseArray", [])) == 0:
                             continue
                         classes["requirements"].append({**format_requirement(k), "master": item["requirementType"]})
@@ -71,19 +94,22 @@ def add_required_classes(data, classes):
                                         applied.append(courseString(apply))
                                     if len(rule) < 2:
                                         continue
-                                    rules.append(f"({courseArray_to_string(rule, "and" if "With Lab" in k.get("label") else "or")})")
+                                    
+                                    courses = courseArray_to_string(rule, "and" if "With Lab" in k.get("label") else "or")
+                                    if courses != "":
+                                        rules.append(f'({courses})')
                                 classes["requirements"].append({
                                     "label": k.get("label"),
                                     "applied": " and ".join(applied),
                                     "percent_complete": k.get("percentComplete", "Unknown"),
-                                    "rule": " or ".join(rules),
+                                    "required": " or ".join(rules),
+                                    "remaining_course_count": (2 if "With Lab" in k.get("label") else 1) - len(applied),
                                     "master": item["requirementValue"]
                                 })
                             else:
                                 classes["requirements"].append({**format_requirement(k), "master": item["requirementValue"]})
                         else:
-                            req = k.get("requirement", {}).get("ifPart" if k.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
-                            for l in req:
+                            for l in boolean_evaluation(k):
                                 if len(l.get("requirement", {}).get("courseArray", [])) == 0:
                                     for m in l.get("ruleArray"):
                                         if m.get("percentComplete") == "Not Needed":
@@ -156,7 +182,7 @@ def extract_prerequisites(prerequisites):
     else:
         formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
     
-    #joing the formatted list of prereq options with "and" connector
+    #joining the formatted list of prereq options with "and" connector
     return ' and '.join(formatted)
 
 # Splits the string of prerequisites into a array of arrays format
@@ -168,5 +194,17 @@ def split_prereqs(prereqs):
     output = []
     for or_req in and_split_array:
         or_split_array = or_req.split(" or ")
+        output.append(or_split_array)
+    return output
+
+# Split the string of requirements into a list of requirements
+def split_requirements(requirements):
+    if not requirements:
+        return []
+    requirements = requirements.replace('(', "").replace(')', "")
+    and_split_array = requirements.split(" or ")
+    output = []
+    for or_req in and_split_array:
+        or_split_array = or_req.split(" and ")
         output.append(or_split_array)
     return output
