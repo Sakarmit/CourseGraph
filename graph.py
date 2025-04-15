@@ -10,7 +10,8 @@ def make_graph():
         gravity=-2000, 
         central_gravity=0.1, 
         spring_length=100, 
-        spring_strength=0.04
+        spring_strength=0.01,
+        overlap=0.05
     )
     
     nxg = nx.Graph()
@@ -43,6 +44,12 @@ def add_node(_label, shape="box", color="#204f37",title=""):   #check if node ar
 
     return labelID
 
+def add_node_if_not_exists(_label, shape="box", color="#204f37",title=""): 
+    if not node_exists(_label):
+        return add_node(_label, shape, color, title)
+    else:
+        return _label
+
 def add_edge(_from, _to, width=1, title="", arrows="to", dashes=False):  #if either node doesnt exist in dict, throw error node not found, if from node exists in dict add the to node to array 
     # if to node exists in the array of that from node DO NOT add that edge
     if isinstance(_from, str) and not (_from in nodes_dict.keys()):
@@ -64,7 +71,13 @@ def add_edge(_from, _to, width=1, title="", arrows="to", dashes=False):  #if eit
     arrows=arrows,
     dashes=dashes,
 )
-    
+
+def add_node_with_edge(_label, shape="box", color="#204f37", title="", _to=None):
+    if _to is None:
+        return add_node(_label, shape, color, title)
+    add_node_if_not_exists(_label, shape, color, title)
+    add_edge(_to, _label)
+
 def node_exists(_label):
     return _label in nodes_dict.keys()
 

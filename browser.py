@@ -11,5 +11,9 @@ def create_browser_instance():
     #chrome_options.add_argument("--auto-open-devtools-for-tabs")
     chrome_options.add_argument(f"--user-data-dir={uncached_folder}")
     chrome_options.add_experimental_option("detach", True)
-    
-    return webdriver.Chrome(options=chrome_options)
+    try:
+        return webdriver.Chrome(options=chrome_options)
+    except Exception as e:
+        print(f"Failed to create browser instance: {type(e)}")
+        print(f"Common issues: Ensure previous browser instances are closed")
+        exit()
