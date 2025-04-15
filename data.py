@@ -52,6 +52,19 @@ def format_requirement(requirement):
 
     return returnDict
 
+# This function recursively evaluates the boolean evaluation of the requirement resulting in a list of requirements
+def boolean_evaluation(requirement):
+    resultRequirements = []
+    req = requirement.get("requirement", {}).get("ifPart" if requirement.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
+    for i in req:
+        if i.get("booleanEvaluation") == None:
+            if len(i.get("requirement", {}).get("courseArray", [])) == 0:
+                continue
+            resultRequirements.append(i)
+        else:
+            resultRequirements.extend(boolean_evaluation(i))
+
+    return resultRequirements
 def add_required_classes(data, classes):
     for item in data["blockArray"]:
         if item["requirementType"] in ["MAJOR", "CONC", "MINOR"]:
@@ -63,9 +76,7 @@ def add_required_classes(data, classes):
                     elif j.get("classesAppliedToRule") is not None:
                         classes["requirements"].append({**format_requirement(j), "master": item["requirementType"]})
                 else:
-                    req = j.get("requirement", {}).get("ifPart" if j.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
-
-                    for k in req:
+                    for k in boolean_evaluation(j):
                         if len(k.get("requirement", {}).get("courseArray", [])) == 0:
                             continue
                         classes["requirements"].append({**format_requirement(k), "master": item["requirementType"]})
@@ -98,8 +109,7 @@ def add_required_classes(data, classes):
                             else:
                                 classes["requirements"].append({**format_requirement(k), "master": item["requirementValue"]})
                         else:
-                            req = k.get("requirement", {}).get("ifPart" if k.get("booleanEvaluation") == "True" else "elsePart", {}).get("ruleArray", [])
-                            for l in req:
+                            for l in boolean_evaluation(k):
                                 if len(l.get("requirement", {}).get("courseArray", [])) == 0:
                                     for m in l.get("ruleArray"):
                                         if m.get("percentComplete") == "Not Needed":
@@ -172,7 +182,7 @@ def extract_prerequisites(prerequisites):
     else:
         formatted.append(f"({' or '.join(current_group)})" if last_connector == "O" else ' and '.join(current_group))
     
-    #joing the formatted list of prereq options with "and" connector
+    #joining the formatted list of prereq options with "and" connector
     return ' and '.join(formatted)
 
 # Splits the string of prerequisites into a array of arrays format
