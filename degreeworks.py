@@ -138,13 +138,27 @@ def get_course_prereqs(browser, subject, course_number):
 # Fetches the prerequisites for a range of courses in a subject
 def get_course_prereqs_range(browser, subject, range):
     courseDataFetch = f'''
-    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={range[0]}%3A{range[1]+1}&=")
+    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={range[0]:04}%3A{range[1]:04}&=")
     .then(response => response.json())
     .then(data => data)
     .catch(error => error);
     '''
     result = browser.execute_script(courseDataFetch)
     return result
+
+# Fetches the prerequisites for multiple range of courses in a subject
+def get_course_prereqs_ranges(browser, subject_ranges):
+    subject_prereqs = []
+    for range in subject_ranges:
+        data = get_course_prereqs_range(browser, range, subject_ranges[range])["courseInformation"]["courses"]
+        for course in data:
+            subject_prereqs.append({
+                "key": course["subjectCode"] + " " + course["courseNumber"],
+                "subject": course["subjectCode"],
+                "number": course["courseNumber"],
+                "prerequisites": course["prerequisites"]
+            })
+    return subject_prereqs
 
 def add_withdrawal_failures_to_student(student, audit_data):
     # Get the classArray from 'insufficient' section

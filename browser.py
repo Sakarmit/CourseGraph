@@ -10,6 +10,8 @@ def create_browser_instance():
     #chrome_options.add_argument("--headless=new")
     #chrome_options.add_argument("--auto-open-devtools-for-tabs")
     chrome_options.add_argument(f"--user-data-dir={uncached_folder}")
+    chrome_options.add_argument('--ignore-certificate-errors')
+    chrome_options.add_argument('--ignore-ssl-errors')
     chrome_options.add_experimental_option("detach", True)
     try:
         return webdriver.Chrome(options=chrome_options)
