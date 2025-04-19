@@ -135,7 +135,7 @@ def get_unique_subjects(array):
     subject_ranges = {}
     for course in array:
         split = course.split(" ")
-        if "ELE" in course[1]:
+        if "ELE" in split[1]:
             continue
         discipline = split[0]
         # use only the first 4 characters of the course to get only the number
@@ -146,7 +146,7 @@ def get_unique_subjects(array):
         if number < subject_ranges[discipline][0]:
             subject_ranges[discipline][0] = number
         if number > subject_ranges[discipline][1]:
-            subject_ranges[discipline][1] = number + 1
+            subject_ranges[discipline][1] = number
 
     return subject_ranges
 

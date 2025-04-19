@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from browser import create_browser_instance
 from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs, split_requirements
 from degreeworks import get_course_prereqs_ranges, get_degrees_data, load_degree_works
@@ -34,6 +35,9 @@ graph.make_graph()
 
 # Add all finished classes to the graph
 for course in classes["all_finished_classes"]:
+    if "ELE" in course["key"]:
+        # Skip elective classes
+        continue
     unprocessed_classes.append(course["key"])
     graph.add_node(course["key"], color=grey)
 
@@ -54,7 +58,7 @@ for or_edges in classes["requirements"]:
         for sub_or in courses[0]:
             if sub_or not in unprocessed_classes:
                 unprocessed_classes.append(sub_or)
-            graph.add_node_with_edge(sub_or, color=green, _to=and_node)
+            graph.add_node_with_edge(sub_or, color=green, _from=and_node)
     else:
         or_node = graph.add_node("OR", shape="circle", color=light_grey)
         for subReqs in courses:
@@ -62,7 +66,7 @@ for or_edges in classes["requirements"]:
                 string = subReqs[0]
                 if string not in unprocessed_classes:
                     unprocessed_classes.append(string)
-                graph.add_node_with_edge(string, color=green, _to=or_node)
+                graph.add_node_with_edge(string, color=green, _from=or_node)
                 continue
 
             and_node = graph.add_node("AND", shape="circle", color=light_grey)
@@ -70,25 +74,30 @@ for or_edges in classes["requirements"]:
             for sub_or in subReqs:
                 if sub_or not in unprocessed_classes:
                     unprocessed_classes.append(sub_or)
-                graph.add_node_with_edge(sub_or, color=green, _to=and_node)
+                graph.add_node_with_edge(sub_or, color=green, _from=and_node)
 
 # Extract unique range of subjects from finished classes in classes dictionary
 subject_prereqs = get_course_prereqs_ranges(browser, get_unique_subjects(unprocessed_classes))
 # Add all courses prerequisites to the graph recursively
-processing = True
-while processing:
-    if len(unprocessed_classes) == 0:
-        if len(backlog_classes) == 0:
-            processing = False
+net_max = 0
+while unprocessed_classes or backlog_classes:
+    if not unprocessed_classes:
+        unprocessed_classes = backlog_classes
+        backlog_classes = []
+        
+        net_max += 1
+        # Check if we have reached the maximum number of iterations
+        # This is to prevent infinite loops in case of circular dependencies
+        # or other issues with the prerequisites
+        if net_max > 8:
+            print("Failed to retrieve prerequisites for all courses")
             break
-        else:
-            unprocessed_classes = backlog_classes
-            for c in get_course_prereqs_ranges(browser, get_unique_subjects(unprocessed_classes)):
-                for subject in subject_prereqs:
-                    if subject["key"] == c["key"]:
-                        continue
-                subject_prereqs.append(c)
-            backlog_classes = []
+        for c in get_course_prereqs_ranges(browser, get_unique_subjects(unprocessed_classes)):
+            for subject in subject_prereqs:
+                if subject["key"] == c["key"]:
+                     continue
+            subject_prereqs.append(c)
+            
     course = unprocessed_classes.pop()
     prereq = None
     for data in subject_prereqs:
@@ -113,7 +122,7 @@ while processing:
                 continue
             
             unprocessed_classes.append(or_edges[0])
-            graph.add_node_with_edge(or_edges[0], color=red, _to=course)
+            graph.add_node_with_edge(or_edges[0], color=red, _from=course)
             continue
         
         for sub_or in or_edges:
@@ -132,11 +141,11 @@ while processing:
             graph.add_edge(course, or_node)
             for sub_or in or_edges:
                 if graph.node_exists(sub_or):
-                    graph.add_edge(sub_or, or_node)
+                    graph.add_edge(or_node, sub_or)
                     continue
 
                 unprocessed_classes.append(sub_or)
-                graph.add_node_with_edge(sub_or, color=red, _to=or_node)
+                graph.add_node_with_edge(sub_or, color=red, _from=or_node)
 
 try:
     file_path = 'uncached/temp.json'
@@ -150,3 +159,4 @@ except:
 graph.draw_graph()
 
 browser.get('file://' + os.path.realpath('home.html'))
+sys.exit()

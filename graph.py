@@ -72,11 +72,11 @@ def add_edge(_from, _to, width=1, title="", arrows="to", dashes=False):  #if eit
     dashes=dashes,
 )
 
-def add_node_with_edge(_label, shape="box", color="#204f37", title="", _to=None):
-    if _to is None:
+def add_node_with_edge(_label, shape="box", color="#204f37", title="", _from=None):
+    if _from is None:
         return add_node(_label, shape, color, title)
     add_node_if_not_exists(_label, shape, color, title)
-    add_edge(_to, _label)
+    add_edge(_from, _label)
 
 def node_exists(_label):
     return _label in nodes_dict.keys()

@@ -138,12 +138,30 @@ def get_course_prereqs(browser, subject, course_number):
 # Fetches the prerequisites for a range of courses in a subject
 def get_course_prereqs_range(browser, subject, range):
     courseDataFetch = f'''
-    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={range[0]:04}%3A{range[1]:04}&=")
+    return fetch("https://degreeworks.charlotte.edu/api/course-link?discipline={subject}&number={range[0]:04}%3A{(range[1]+1):04}&=")
     .then(response => response.json())
     .then(data => data)
     .catch(error => error);
     '''
     result = browser.execute_script(courseDataFetch)
+    if result["courseInformation"].get("error"):
+        print(f"Failed to get course prerequisites for {subject} {range[0]} - {range[1]}")
+        return {
+            "courseInformation": {
+                "courses": [
+                    {
+                        "subjectCode": subject,
+                        "courseNumber": f"{range[0]:04}",
+                        "prerequisites": []
+                    },
+                    {
+                        "subjectCode": subject,
+                        "courseNumber": f"{(range[1]-1):04}",
+                        "prerequisites": []
+                    }
+                ]
+            }
+        }
     return result
 
 # Fetches the prerequisites for multiple range of courses in a subject
