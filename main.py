@@ -7,6 +7,10 @@ from degreeworks import get_course_prereqs_ranges, get_degrees_data, load_degree
 from file import update_graph_from_ex
 import graph
 
+degreeeWorksMode = "--noDW" not in sys.argv
+if not degreeeWorksMode:
+    print("No DegreeWorks mode enabled")
+
 green = "#00b200"
 red = "#b20000"
 grey = "#808080"
@@ -25,9 +29,9 @@ unprocessed_classes = []
 backlog_classes = []
 
 browser = create_browser_instance()
-load_degree_works(browser)
 
 # Open degreeworks and save user data to degreeworks.json if file does not exist
+load_degree_works(browser)
 get_degrees_data(browser)
 # Extract courses from degreeworks.json and store them in classes dictionary
 extract_all_classes(classes)

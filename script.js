@@ -1,3 +1,4 @@
+let includeCompleted = false;
 document.addEventListener("DOMContentLoaded", () => {
     backupLabels();
 
@@ -5,6 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("input", (event) => {
         selectNodesNeighbourhood(event.target.value);
     });
+
+    document.getElementById("checkbox")
+    .addEventListener("change", (event) => {
+        includeCompleted = event.target.checked;
+        toggleCompletedCourses();
+    });
+
+    toggleCompletedCourses();
 });
 
 function backupLabels() {
@@ -12,6 +21,19 @@ function backupLabels() {
         if (allNodes[nodeId].label !== undefined) {
             allNodes[nodeId].savedLabel = allNodes[nodeId].label;
         }
+    }
+}
+
+function toggleCompletedCourses() {
+    for (let nodeId in allNodes) {
+        let updateArray = [];
+
+        if (allNodes[nodeId].color === "#808080") {
+            allNodes[nodeId].hidden = !includeCompleted;
+            updateArray.push(allNodes[nodeId]);
+        }
+
+        nodes.update(updateArray);
     }
 }
 

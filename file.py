@@ -25,14 +25,18 @@ def update_graph_from_ex():
     moded_data = moded_data.replace("<body>", """
         <body>
             <div class="header">
-                <div class="filter">
-                    <input id="filter" type="text" placeholder="Search...">
+                <div>
+                    <input class="filter" id="filter" type="text" placeholder="Search...">
+                    <input class="checkbox" id="checkbox" type="checkbox">
+                    <label for="checkbox" class="switch">Include Completed Courses</label>
                 </div>
-                <div class="header-button">
-                    <a href="faq.html">FAQ</a>
-                </div>
-                <div class="header-button">
-                    <a href="#">Settings</a>
+                <div>         
+                    <div class="header-button">
+                        <a href="faq.html">FAQ</a>
+                    </div>
+                    <div class="header-button">
+                        <a href="#">Profile</a>
+                    </div>
                 </div>
             </div>
         """)

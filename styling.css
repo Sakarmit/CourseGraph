@@ -101,13 +101,19 @@
   width: 100%;
   background: #FFFFFF;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 4px;
   gap: 4px;
 }
 
-.header-button{
+.header > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-button {
   width: 196px;
   height: 69px;
   background: #000;
