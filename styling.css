@@ -1,25 +1,11 @@
+* {
+  font-family: 'Konkhmer Sleokchher', sans-serif;
+}
+
 .screen {
   position: relative;
   width: 1280px;
   height: 832px;
-
-  background: #ffffff;
-}
-
-.containter2 {
-  position: absolute;
-  width: 184px;
-  height: 134px;
-  left: 1072px;
-  top: 19px;
-}
-
-.container2 {
-  position: absolute;
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
 
   background: #ffffff;
 }
@@ -109,4 +95,45 @@
   align-items: center;
 
   color: #000000;
+}
+
+.header {
+  width: 100%;
+  background: #FFFFFF;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+}
+
+.header-button{
+  width: 196px;
+  height: 69px;
+  background: #000;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-button a {
+  font-size: 32px;
+  color: #FFF;
+  text-decoration: none;
+}
+
+.header-button a:hover {
+  font-size: 40px;
+  text-decoration-line: underline;
+  text-decoration-thickness: 4px;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+.filter {
+  position: relative;
+  font-size: x-large;
 }

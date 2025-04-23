@@ -4,6 +4,7 @@ import sys
 from browser import create_browser_instance
 from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs, split_requirements
 from degreeworks import get_course_prereqs_ranges, get_degrees_data, load_degree_works
+from file import update_graph_from_ex
 import graph
 
 green = "#00b200"
@@ -157,6 +158,6 @@ except:
     browser.quit()        
 
 graph.draw_graph()
-
+update_graph_from_ex()
 browser.get('file://' + os.path.realpath('home.html'))
 sys.exit()

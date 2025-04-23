@@ -5,7 +5,7 @@ nodes_dict = {}
 
 def make_graph():
     global graph
-    graph=Network(notebook=True, directed=True, select_menu=True)
+    graph=Network(notebook=True, directed=True)
     graph.barnes_hut(
         gravity=-2000, 
         central_gravity=0.1, 
