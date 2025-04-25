@@ -8,7 +8,7 @@ def add_student_data(student):
         file.write(moded_data)
 
 def update_graph_from_ex():
-    with open("exTest.html", 'r') as file:
+    with open("ex.html", 'r') as file:
         data = file.read()
     #Remove unwanted tags
     data = data.replace("<h1></h1>", "")
