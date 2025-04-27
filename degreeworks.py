@@ -118,15 +118,6 @@ def get_degrees_data(browser):
     add_withdrawal_failures_to_student(student, result)
 
     add_student_data(student)
-    # Saving student degree data to json file 
-    try:
-        os.makedirs('uncached', exist_ok=True)
-        file_path = 'uncached/student.json'
-        with open(file_path, 'w+') as file:
-            json.dump(student, file)
-    except:
-        print("Failed to save student data to file")
-        browser.quit()
 
     # Saving student degree data to json file 
     try:

@@ -149,16 +149,7 @@ while unprocessed_classes or backlog_classes:
                     continue
 
                 unprocessed_classes.append(sub_or)
-                graph.add_node_with_edge(sub_or, color=red, _from=or_node)
-
-try:
-    file_path = 'uncached/temp.json'
-    print("SUCCESS")
-    with open(file_path, 'w+') as file:
-        json.dump(classes, file)
-except:
-    print("Failed to save")
-    browser.quit()        
+                graph.add_node_with_edge(sub_or, color=red, _from=or_node)      
 
 graph.draw_graph()
 update_graph_from_ex()
