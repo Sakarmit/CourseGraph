@@ -37,11 +37,14 @@ extract_all_classes(classes, )
 
 graph.make_graph()
 
+finished_classes_keys = []
 # Add all finished classes to the graph
 for course in classes["all_finished_classes"]:
     if "ELE" in course["key"]:
         # Skip elective classes
         continue
+
+    finished_classes_keys.append(course["key"])
     unprocessed_classes.append(course["key"])
     graph.add_node(course["key"], color=grey)
 
@@ -124,18 +127,20 @@ while unprocessed_classes or backlog_classes:
             if graph.node_exists(or_edges[0]):
                 graph.add_edge(course, or_edges[0])
                 continue
+            elif course in finished_classes_keys:
+                # If the course is already finished, and has a uncompleted prerequisite, skip them
+                continue
             
             unprocessed_classes.append(or_edges[0])
             graph.add_node_with_edge(or_edges[0], color=red, _from=course)
             continue
         
         for sub_or in or_edges:
-            for completed in classes["all_finished_classes"]:
-                if completed["key"] == sub_or:
-                    # If the requirement is already fullfilled
-                    or_edges = [sub_or]
-                    graph.add_edge(course, or_edges[0])
-                    break
+            if sub_or in finished_classes_keys:
+                # If the requirement is already fullfilled
+                or_edges = [sub_or]
+                graph.add_edge(course, or_edges[0])
+                break
             
             if len(or_edges) == 1:
                 break
@@ -146,6 +151,9 @@ while unprocessed_classes or backlog_classes:
             for sub_or in or_edges:
                 if graph.node_exists(sub_or):
                     graph.add_edge(or_node, sub_or)
+                    continue
+                elif course in finished_classes_keys:
+                    # If the course is already finished, and has a uncompleted prerequisite, skip them
                     continue
 
                 unprocessed_classes.append(sub_or)
