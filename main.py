@@ -132,7 +132,7 @@ while unprocessed_classes or backlog_classes:
                 continue
             
             unprocessed_classes.append(or_edges[0])
-            graph.add_node_with_edge(or_edges[0], color=red, _from=course)
+            graph.add_node_with_edge(or_edges[0], color=green, _from=course)
             continue
         
         for sub_or in or_edges:
@@ -157,7 +157,7 @@ while unprocessed_classes or backlog_classes:
                     continue
 
                 unprocessed_classes.append(sub_or)
-                graph.add_node_with_edge(sub_or, color=red, _from=or_node)      
+                graph.add_node_with_edge(sub_or, color=green, _from=or_node)      
 
 graph.draw_graph()
 update_graph_from_ex()

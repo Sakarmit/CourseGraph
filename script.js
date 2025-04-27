@@ -1,6 +1,7 @@
 let includeCompleted = false;
 document.addEventListener("DOMContentLoaded", () => {
     backupLabels();
+    updateColors();
 
     document.getElementById("filter")
     .addEventListener("input", (event) => {
@@ -22,6 +23,40 @@ function backupLabels() {
             allNodes[nodeId].savedLabel = allNodes[nodeId].label;
         }
     }
+}
+
+function updateColors() {
+    let nodesToUpdate = [];
+
+    let redNodes = [];
+    let greenNodes = Object.keys(allNodes)
+        .filter((node) =>
+            !node.includes('OR') &&
+            allNodes[node].color == "#00b200")
+
+    let nodeReqs = {};
+    for (let edgeId in allEdges) {
+        let edgeFrom = allEdges[edgeId].from
+        
+        if (!redNodes.includes(edgeFrom) && greenNodes.includes(edgeFrom)) {
+
+            let edgeTo = allEdges[edgeId].to
+            
+            if (greenNodes.includes(edgeTo) 
+                || edgeTo.includes('OR')) {
+                allNodes[edgeFrom].color = "#b20000"
+                nodeColors[edgeFrom] = "#b20000"
+                nodesToUpdate.push(allNodes[edgeFrom]);
+            } else {
+                if (nodeReqs[edgeFrom] === undefined) {
+                    nodeReqs[edgeFrom] = []
+                }
+                nodeReqs[edgeFrom].push(edgeTo)
+            }
+        }
+    }
+    nodes.update(nodesToUpdate);
+    console.log(nodeReqs);
 }
 
 function toggleCompletedCourses() {
