@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("change", (event) => {
         includeCompleted = event.target.checked;
         toggleCompletedCourses();
+        if (includeCompleted) {
+            selectNodesNeighbourhood(document.getElementById("filter").value);
+        }
     });
 
     toggleCompletedCourses();
@@ -56,7 +59,6 @@ function updateColors() {
         }
     }
     nodes.update(nodesToUpdate);
-    console.log(nodeReqs);
 }
 
 function toggleCompletedCourses() {
