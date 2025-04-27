@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import json
 import os
 
+noFetchMode = False
+
 degree_works = 'https://degreeworks.charlotte.edu/worksheets/WEB31'
 
 """
@@ -20,6 +22,8 @@ degree_works = 'https://degreeworks.charlotte.edu/worksheets/WEB31'
         browser: A browser instance used to interact with the webpage.
 """
 def load_degree_works(browser):
+    if noFetchMode:
+        return
     # Fetching degreeworks page
     browser.get(degree_works)
     if not 'https://degreeworks.charlotte.edu/worksheets/WEB31' == browser.current_url:
@@ -64,7 +68,12 @@ def get_user_info(browser):
         .then(data => data)
         .catch(error => error);
     '''
-    result = browser.execute_script(userInfoFetch)
+    if noFetchMode:
+        with (open('base_files/demoUser.json', 'r')) as file:
+            result = json.load(file)
+    else:
+        result = browser.execute_script(userInfoFetch)
+
     try:
         student = {}
         
@@ -97,7 +106,11 @@ def get_degrees_data(browser):
     .catch(error => error);
     '''
 
-    result = browser.execute_script(degreeDataFetch)
+    if noFetchMode:
+        with (open('base_files/demoDegree.json', 'r')) as file:
+            result = json.load(file)
+    else:
+        result = browser.execute_script(degreeDataFetch)
 
     # Add extra data to student object
     student['gpa'] = result['auditHeader']['studentSystemGpa']
@@ -143,7 +156,14 @@ def get_course_prereqs_range(browser, subject, range):
     .then(data => data)
     .catch(error => error);
     '''
-    result = browser.execute_script(courseDataFetch)
+    
+    if noFetchMode:
+        with (open('base_files/demoReqs.json', 'r')) as file:
+            data = json.load(file)
+        result = data.get(subject, {}).get(f"{range[0]}:{range[1]}", {})
+    else:
+        result = browser.execute_script(courseDataFetch)
+
     if result["courseInformation"].get("error"):
         print(f"Failed to get course prerequisites for {subject} {range[0]} - {range[1]}")
         return {

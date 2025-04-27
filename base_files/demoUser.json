@@ -1,0 +1,205 @@
+{
+    "_embedded": {
+        "students": [
+            {
+                "activeTerm": "202510",
+                "bridgeChanged": {
+                    "date": "20250420",
+                    "time": "0030"
+                },
+                "bridgeRefresh": {
+                    "date": "20250426",
+                    "time": "2011"
+                },
+                "custom": [
+                    {
+                        "code": "ADVISOR",
+                        "degree": "",
+                        "school": "",
+                        "value": "C G"
+                    },
+                    {
+                        "code": "EARLYENTRY",
+                        "degree": "",
+                        "school": "",
+                        "value": "Yes"
+                    },
+                    {
+                        "code": "GRADAPPLIED",
+                        "degree": "",
+                        "school": "",
+                        "value": "Comp Sci-BS-AI,Robtc,Gmg in Spring 2025"
+                    },
+                    {
+                        "code": "LANG",
+                        "degree": "",
+                        "school": "UG",
+                        "value": "Foreign Language Not Exempt"
+                    },
+                    {
+                        "code": "MATHPLCMT",
+                        "degree": "",
+                        "school": "UG",
+                        "value": "ML4"
+                    },
+                    {
+                        "code": "TESTSCORE",
+                        "degree": "",
+                        "school": "",
+                        "value": "UWRT WR03"
+                    },
+                    {
+                        "code": "UWRTPLCMT",
+                        "degree": "",
+                        "school": "UG",
+                        "value": "WR03"
+                    },
+                    {
+                        "code": "",
+                        "value": ""
+                    }
+                ],
+                "goals": [
+                    {
+                        "catalogYear": {
+                            "description": "2022-2023",
+                            "key": "2022"
+                        },
+                        "degree": {
+                            "description": "Bachelor of Science",
+                            "key": "BS"
+                        },
+                        "details": [
+                            {
+                                "code": {
+                                    "description": "College",
+                                    "key": "COLLEGE"
+                                },
+                                "value": {
+                                    "description": "Computing and Informatics",
+                                    "key": "IT"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Concentration",
+                                    "key": "CONC"
+                                },
+                                "value": {
+                                    "description": "AI, Robotics & Gaming",
+                                    "key": "AIRG"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Major",
+                                    "key": "MAJOR"
+                                },
+                                "value": {
+                                    "description": "Computer Science",
+                                    "key": "CSCI"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Minor",
+                                    "key": "MINOR"
+                                },
+                                "value": {
+                                    "description": "Mathematics",
+                                    "key": "MATH"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Program",
+                                    "key": "PROGRAM"
+                                },
+                                "value": {
+                                    "description": "(UG) Comp Sci-BS-AI, Robotics, and Gaming",
+                                    "key": "CSCI-BS-AIRG"
+                                }
+                            }
+                        ],
+                        "level": {
+                            "description": "Senior",
+                            "key": "SR"
+                        },
+                        "school": {
+                            "description": "Undergraduate",
+                            "key": "UG"
+                        }
+                    },
+                    {
+                        "catalogYear": {
+                            "description": "2024-2025",
+                            "key": "2024"
+                        },
+                        "degree": {
+                            "description": "Master of Science",
+                            "key": "MS"
+                        },
+                        "details": [
+                            {
+                                "code": {
+                                    "description": "Concentration",
+                                    "key": "CONC"
+                                },
+                                "value": {
+                                    "description": "AI, Robotics & Gaming",
+                                    "key": "AIRG"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Program",
+                                    "key": "PROGRAM"
+                                },
+                                "value": {
+                                    "description": "(GR) Computer Science-MS",
+                                    "key": "CSCI-MS"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "Major",
+                                    "key": "MAJOR"
+                                },
+                                "value": {
+                                    "description": "Computer Science",
+                                    "key": "CSCI"
+                                }
+                            },
+                            {
+                                "code": {
+                                    "description": "College",
+                                    "key": "COLLEGE"
+                                },
+                                "value": {
+                                    "description": "Computing and Informatics",
+                                    "key": "IT"
+                                }
+                            }
+                        ],
+                        "level": {
+                            "description": "Graduate Student",
+                            "key": "GR"
+                        },
+                        "school": {
+                            "description": "Graduate",
+                            "key": "GR"
+                        }
+                    }
+                ],
+                "id": "12345678",
+                "name": "S, S"
+            }
+        ]
+    },
+    "page": {
+        "number": "0",
+        "size": "999",
+        "totalElements": "1",
+        "totalPages": "1"
+    }
+}

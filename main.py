@@ -4,12 +4,11 @@ import sys
 from browser import create_browser_instance
 from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs, split_requirements
 from degreeworks import get_course_prereqs_ranges, get_degrees_data, load_degree_works
+import degreeworks
 from file import update_graph_from_ex
 import graph
 
-degreeeWorksMode = "--noDW" not in sys.argv
-if not degreeeWorksMode:
-    print("No DegreeWorks mode enabled")
+degreeworks.noFetchMode = "--noFetch" in sys.argv
 
 green = "#00b200"
 red = "#b20000"
@@ -34,7 +33,7 @@ browser = create_browser_instance()
 load_degree_works(browser)
 get_degrees_data(browser)
 # Extract courses from degreeworks.json and store them in classes dictionary
-extract_all_classes(classes)
+extract_all_classes(classes, )
 
 graph.make_graph()
 
