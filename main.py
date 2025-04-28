@@ -146,14 +146,14 @@ while unprocessed_classes or backlog_classes:
                 break
                 
         if len(or_edges) > 1:
+            if course in finished_classes_keys:
+                # If the course is already finished, and has a uncompleted prerequisite, skip them
+                continue
             or_node = graph.add_node("OR", shape="circle", color=light_grey)
             graph.add_edge(course, or_node)
             for sub_or in or_edges:
                 if graph.node_exists(sub_or):
                     graph.add_edge(or_node, sub_or)
-                    continue
-                elif course in finished_classes_keys:
-                    # If the course is already finished, and has a uncompleted prerequisite, skip them
                     continue
 
                 unprocessed_classes.append(sub_or)
