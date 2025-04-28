@@ -1,10 +1,11 @@
 let includeCompleted = false;
 document.addEventListener("DOMContentLoaded", () => {
+    const filterInput = document.getElementById("filter");
+
     backupLabels();
     updateColors();
 
-    document.getElementById("filter")
-    .addEventListener("input", (event) => {
+    filterInput.addEventListener("input", (event) => {
         selectNodesNeighbourhood(event.target.value);
     });
 
@@ -13,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         includeCompleted = event.target.checked;
         toggleCompletedCourses();
         if (includeCompleted) {
-            selectNodesNeighbourhood(document.getElementById("filter").value);
+            selectNodesNeighbourhood(filterInput.value);
         }
     });
 
@@ -31,22 +32,18 @@ function backupLabels() {
 function updateColors() {
     let nodesToUpdate = [];
 
-    let redNodes = [];
-    let greenNodes = Object.keys(allNodes)
+    let redNodes = new Set();
+    let greenNodes = new Set(Object.keys(allNodes)
         .filter((node) =>
             !node.includes('OR') &&
-            allNodes[node].color == "#00b200")
+            allNodes[node].color == "#00b200"))
 
     let nodeReqs = {};
     for (let edgeId in allEdges) {
-        let edgeFrom = allEdges[edgeId].from
+        const { from: edgeFrom, to: edgeTo } = allEdges[edgeId];
         
-        if (!redNodes.includes(edgeFrom) && greenNodes.includes(edgeFrom)) {
-
-            let edgeTo = allEdges[edgeId].to
-            
-            if (greenNodes.includes(edgeTo) 
-                || edgeTo.includes('OR')) {
+        if (!redNodes.has(edgeFrom) && greenNodes.has(edgeFrom)) {    
+            if (greenNodes.has(edgeTo) || edgeTo.includes('OR')) {
                 allNodes[edgeFrom].color = "#b20000"
                 nodeColors[edgeFrom] = "#b20000"
                 nodesToUpdate.push(allNodes[edgeFrom]);
@@ -62,52 +59,48 @@ function updateColors() {
 }
 
 function toggleCompletedCourses() {
+    let updateArray = [];
     for (let nodeId in allNodes) {
-        let updateArray = [];
-
         if (allNodes[nodeId].color === "#808080") {
             allNodes[nodeId].hidden = !includeCompleted;
             updateArray.push(allNodes[nodeId]);
         }
-
-        nodes.update(updateArray);
     }
+    nodes.update(updateArray);
 }
 
 function selectNodesNeighbourhood(value) {
-    let mainNodes = Object.keys(allNodes)
-        .filter((node) => node.includes(value))
+    let mainNodes = new Set(Object.keys(allNodes)
+        .filter((node) => node.includes(value)));
 
     for (let nodeId in allNodes) {
         allNodes[nodeId].hidden = true;
         allNodes[nodeId].color = nodeColors[nodeId];
     }
 
-    let neighbour1 = [];
+    let neighbour1 = new Set();
     for (let nodeId of mainNodes) {
         allNodes[nodeId].hidden = false;
         allNodes[nodeId].color = nodeColors[nodeId];
-        neighbour1.push(network.getConnectedNodes(nodeId));
+        network.getConnectedNodes(nodeId).forEach((n) => neighbour1.add(n));
     }
     
-    for (let arr of neighbour1) {
-        for (let nodeId of arr) {
-            if (allNodes[nodeId].hidden === false) {
-                continue;
-            }
-            
-            allNodes[nodeId].hidden = false;
-            allNodes[nodeId].color = `rgba(
+    for (let nodeId of neighbour1) {
+        if (allNodes[nodeId].hidden === false) {
+            continue;
+        }            
+        allNodes[nodeId].hidden = false;
+        allNodes[nodeId].color = `rgba(
             ${parseInt(nodeColors[nodeId].substring(1, 3), 16)}, 
             ${parseInt(nodeColors[nodeId].substring(3, 5), 16)}, 
             ${parseInt(nodeColors[nodeId].substring(5, 7), 16)}, 0.5)`;
-        }
     }
-
+    
     var updateArray = [];
     for (let nodeId in allNodes) {
-        updateArray.push(allNodes[nodeId]);
+        if (allNodes[nodeId].hidden === false) {
+            updateArray.push(allNodes[nodeId]);
+        }
     }
-
     nodes.update(updateArray);
 }
