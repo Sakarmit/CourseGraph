@@ -7,6 +7,27 @@ def add_student_data(student):
     with open("home.html", 'w+') as file:
         file.write(moded_data)
 
+
+def add_profile_data(student):
+    # Load the profile HTML template
+    with open("profile.html", 'r') as file:
+        data = file.read()
+    
+    # Split name to extract first name
+    name_parts = student.get("name", "").split(", ")
+    first_name = name_parts[-1] if len(name_parts) > 1 else student.get("name", "")
+    
+    # Replace placeholders with actual student data
+    modded_data = data.replace("[first-name]", first_name)
+    modded_data = modded_data.replace("[major]", student.get("major", "N/A"))
+    modded_data = modded_data.replace("[gpa]", str(student.get("gpa", "N/A")))
+    modded_data = modded_data.replace("[withdrawals-remaining]", str(student.get("withdrawals_left", "N/A")))
+    modded_data = modded_data.replace("[credit_hours_applied]", str(student.get("total_credits", "N/A")))
+
+    # Write the modified data to profile.html
+    with open("profile.html", 'w+') as file:
+        file.write(modded_data)
+
 def update_graph_from_ex():
     with open("ex.html", 'r') as file:
         data = file.read()

@@ -1,5 +1,5 @@
 #importing seleniummodules for data scraping
-from file import add_student_data
+from file import add_student_data, add_profile_data
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -116,9 +116,10 @@ def get_degrees_data(browser):
     student['gpa'] = result['auditHeader']['studentSystemGpa']
     
     add_withdrawal_failures_to_student(student, result)
-
+    add_some_more_data(student, result)
     add_student_data(student)
-
+    add_profile_data(student)
+    print(student)
     # Saving student degree data to json file 
     try:
         os.makedirs('uncached', exist_ok=True)
@@ -204,3 +205,35 @@ def add_withdrawal_failures_to_student(student, audit_data):
     # Add to student dict
     student["withdrawals"] = num_withdrawals
     student["failures"] = num_qf
+
+
+def add_some_more_data(student, audit_data):
+
+    # Extract the classArray from the audit data
+    class_array = audit_data.get("classInformation", {}).get("classArray", [])
+
+    # Count withdrawals
+    num_withdrawals = sum(1 for c in class_array if c.get("letterGrade") == "W")
+    # withdrawl dif
+    num_withdrawals_left = 16 - num_withdrawals
+
+    # Sum the total credits from all classes in the classArray
+    total_credits = 0
+    for course in class_array:
+        try:
+            total_credits += float(course.get('credits', 0))
+        except (ValueError, TypeError):
+            continue
+
+    # Find major from blockArray
+    major = 'Unknown'
+    for block in audit_data.get("blockArray", []):
+        if block.get("requirementType") == "MAJOR":
+            major = block.get("requirementValue", "Unknown")
+            break
+
+    # Add the extracted information to the student dictionary
+    student["withdrawals_left"] = num_withdrawals_left
+    student["total_credits"] = total_credits
+    student["major"] = major
+
