@@ -36,6 +36,3 @@ In a manner which can help understand courses which they should attempt to compl
 - **Logging in:** On program start you are required to login in using your credentials.
 - **Panning:** Hold left mouse button and drag to move around the map region.
 - **Course Details:** Click on a specific course to highlight it's prerequisites and requisites it fulfills.
-
-## Team’s Progress
-We are currently making progress on parts retrieving and processing the data that will be visualized.
