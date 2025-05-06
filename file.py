@@ -1,3 +1,87 @@
+import re
+import degreeworks
+def reset_profile_html():
+    with open("profile_ref.html", "r", encoding="utf-8") as ref_file:
+        ref_content = ref_file.read()
+
+    # Write to the live profile file
+    with open("profile.html", "w", encoding="utf-8") as profile_file:
+        profile_file.write(ref_content)
+
+    # Write to the base template copy
+    with open("base_files/profile.html", "w", encoding="utf-8") as base_file:
+        base_file.write(ref_content)
+
+    print("profile.html and base_files/profile.html reset using profile_ref.html.")
+
+
+
+
+
+def generate_class_and_class_grade(classes):
+    html_rows = ""
+    for course in classes:
+        grade = course.get("letterGrade", "")
+        credits = int(course.get("credits", 0))
+
+        # Skip non-final grades and zero-credit entries
+        if grade in ("*REG", "W", "QF") or credits == 0:
+            continue
+
+        course_name = f"{course['discipline']} {course['number']}"
+        html_rows += (
+            f"                    <tr>\n"
+            f"                        <td class=\"question\">{course_name}</td>\n"
+            f"                        <td class=\"question\">{grade}</td>\n"
+            f"                    </tr>\n"
+        )
+    return html_rows
+
+
+def update_profile_html_with_courses(course_list):
+    with open("profile.html", "r", encoding="utf-8") as file:
+        html = file.read()
+
+    # This is the exact placeholder you want to detect
+    original_block = '''            <div class="faq-item">
+            <table>
+                <tr>
+                  <th class="question">Course</th>
+                  <th class="question">Grade</th>
+            </div>'''
+
+    # Only proceed if the placeholder is still there (i.e., not already updated)
+    if original_block not in html:
+        print("Skipping update: Course table has already been filled.")
+        return
+
+    # Generate course rows
+    new_rows = generate_class_and_class_grade(course_list)
+
+    # New full table block to insert
+    new_block = f'''<div class="faq-item">
+            <table>
+                <tr>
+                  <th class="question">Course</th>
+                  <th class="question">Grade</th>
+                </tr>
+{new_rows}            </table>
+        </div>'''
+
+    # Perform replacement
+    updated_html = html.replace(original_block, new_block)
+
+    if degreeworks.noFetchMode == True:
+        with open("base_files/profile.html", 'w+') as file:
+            file.write(updated_html)
+    with open("profile.html", 'w+') as file:
+        file.write(updated_html)
+
+    print("profile.html updated with course rows.")
+
+
+
+
 def add_student_data(student):
     name = student["name"]
     arr = name.split(', ')
@@ -25,6 +109,9 @@ def add_profile_data(student):
     modded_data = modded_data.replace("[credit_hours_applied]", str(student.get("total_credits", "N/A")))
 
     # Write the modified data to profile.html
+    if degreeworks.noFetchMode == True:
+        with open("base_files/profile.html", 'w+') as file:
+            file.write(modded_data)
     with open("profile.html", 'w+') as file:
         file.write(modded_data)
 
@@ -56,7 +143,7 @@ def update_graph_from_ex():
                         <a href="faq.html">FAQ</a>
                     </div>
                     <div class="header-button">
-                        <a href="#">Profile</a>
+                        <a href="profile.html">Profile</a>
                     </div>
                 </div>
             </div>

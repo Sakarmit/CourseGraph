@@ -1,5 +1,5 @@
 #importing seleniummodules for data scraping
-from file import add_student_data, add_profile_data
+from file import add_student_data, add_profile_data, reset_profile_html
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -114,7 +114,7 @@ def get_degrees_data(browser):
 
     # Add extra data to student object
     student['gpa'] = result['auditHeader']['studentSystemGpa']
-    
+    reset_profile_html()
     add_withdrawal_failures_to_student(student, result)
     add_some_more_data(student, result)
     add_student_data(student)

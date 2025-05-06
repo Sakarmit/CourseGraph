@@ -4,7 +4,7 @@ from browser import create_browser_instance
 from data import extract_all_classes, extract_prerequisites, get_unique_subjects, split_prereqs, split_requirements
 from degreeworks import get_course_prereqs_ranges, get_degrees_data, load_degree_works
 import degreeworks
-from file import update_graph_from_ex
+from file import update_graph_from_ex, update_profile_html_with_courses
 import graph
 
 degreeworks.noFetchMode = "--noFetch" in sys.argv
@@ -33,7 +33,8 @@ load_degree_works(browser)
 get_degrees_data(browser)
 # Extract courses from degreeworks.json and store them in classes dictionary
 extract_all_classes(classes, )
-
+# print(classes['all_finished_classes'])
+update_profile_html_with_courses(classes['all_finished_classes'])
 graph.make_graph()
 
 finished_classes_keys = []
