@@ -50,7 +50,6 @@ def update_profile_html_with_courses(course_list):
                   <th class="question">Grade</th>
             </div>'''
 
-    # Only proceed if the placeholder is still there (i.e., not already updated)
     if original_block not in html:
         print("Skipping update: Course table has already been filled.")
         return
