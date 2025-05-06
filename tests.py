@@ -73,19 +73,24 @@ class TestDataExtraction(unittest.TestCase):
             "label": "Some Req",
             "percentComplete": "80%",
             "classesAppliedToRule": {"classArray": [{"discipline": "CS", "number": "1010"}]},
-            "requirement": {"courseArray": [{"discipline": "MATH", "number": "1241"}]},
+            "requirement": {
+                "courseArray": [{"discipline": "MATH", "number": "1241"}],
+                "creditsBegin": "6"
+            },
+            "creditsApplied": "3"
         }
         expected = {
             "label": "Some Req",
             "applied": "CS 1010",
             "percent_complete": "80%",
-            "required": "MATH 1241"
+            "required": "MATH 1241",
+            "remaining_credit_count": 3
         }
         self.assertEqual(data.format_requirement(requirement), expected)
 
     def test_get_unique_subjects(self):
-        arr1 = [{"discipline": "CS", "number": "1010"}, {"discipline": "CS", "number": "2010"}]
-        arr2 = [{"discipline": "MATH", "number": "1241"}]
+        arr1 = ["CS 1010", "CS 1013", "CS 2010"]
+        arr2 = ["MATH 1241"]
         expected = {"CS": [1010, 2010], "MATH": [1241, 1241]}
         self.assertEqual(data.get_unique_subjects(arr1, arr2), expected)
 

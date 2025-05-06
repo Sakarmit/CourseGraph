@@ -131,22 +131,23 @@ def add_insufficient_classes(data, classes):
         classes["insufficient"].append(insufficient)  # Add to list
 
 # Extracts unique range of subjects from a multiple lists of classes
-def get_unique_subjects(array):
+def get_unique_subjects(*arrays):
     subject_ranges = {}
-    for course in array:
-        split = course.split(" ")
-        if "ELE" in split[1]:
-            continue
-        discipline = split[0]
-        # use only the first 4 characters of the course to get only the number
-        number = int(split[1][:4])
-        if discipline not in subject_ranges:
-            subject_ranges[discipline] = [9999, 0000]
+    for array in arrays:
+        for course in array:
+            split = course.split(" ")
+            if "ELE" in split[1]:
+                continue
+            discipline = split[0]
+            # use only the first 4 characters of the course to get only the number
+            number = int(split[1][:4])
+            if discipline not in subject_ranges:
+                subject_ranges[discipline] = [9999, 0000]
 
-        if number < subject_ranges[discipline][0]:
-            subject_ranges[discipline][0] = number
-        if number > subject_ranges[discipline][1]:
-            subject_ranges[discipline][1] = number
+            if number < subject_ranges[discipline][0]:
+                subject_ranges[discipline][0] = number
+            if number > subject_ranges[discipline][1]:
+                subject_ranges[discipline][1] = number
 
     return subject_ranges
 
