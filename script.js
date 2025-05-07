@@ -98,9 +98,7 @@ function selectNodesNeighbourhood(value) {
     
     var updateArray = [];
     for (let nodeId in allNodes) {
-        if (allNodes[nodeId].hidden === false) {
-            updateArray.push(allNodes[nodeId]);
-        }
+        updateArray.push(allNodes[nodeId]);
     }
     nodes.update(updateArray);
 }
